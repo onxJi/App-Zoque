@@ -18,6 +18,22 @@ import 'package:appzoque/features/home/data/repositories/home_repository_impl.da
 import 'package:appzoque/features/home/domain/repositories/home_repository.dart';
 import 'package:appzoque/features/home/domain/usecases/get_menu_items.dart';
 import 'package:appzoque/features/home/presentation/viewmodels/home_viewmodel.dart';
+import 'package:appzoque/features/teaching/data/datasources/teaching_mock_datasource.dart';
+import 'package:appzoque/features/teaching/data/repositories/teaching_repository_impl.dart';
+import 'package:appzoque/features/teaching/domain/repositories/teaching_repository.dart';
+import 'package:appzoque/features/teaching/domain/usecases/get_teaching_modules.dart';
+import 'package:appzoque/features/teaching/domain/usecases/get_teaching_module_by_id.dart';
+import 'package:appzoque/features/teaching/presentation/viewmodels/teaching_viewmodel.dart';
+import 'package:appzoque/features/admin/data/datasources/admin_mock_datasource.dart';
+import 'package:appzoque/features/admin/data/repositories/admin_repository_impl.dart';
+import 'package:appzoque/features/admin/domain/repositories/admin_repository.dart';
+import 'package:appzoque/features/admin/domain/usecases/add_word.dart';
+import 'package:appzoque/features/admin/domain/usecases/update_word.dart';
+import 'package:appzoque/features/admin/domain/usecases/delete_word.dart';
+import 'package:appzoque/features/admin/domain/usecases/add_module.dart';
+import 'package:appzoque/features/admin/domain/usecases/update_module.dart';
+import 'package:appzoque/features/admin/domain/usecases/delete_module.dart';
+import 'package:appzoque/features/admin/presentation/viewmodels/admin_viewmodel.dart';
 import 'package:http/http.dart' as http;
 
 class DependencyInjection {
@@ -34,6 +50,12 @@ class DependencyInjection {
 
   // Home dependencies
   late final HomeViewModel homeViewModel;
+
+  // Teaching dependencies
+  late final TeachingViewModel teachingViewModel;
+
+  // Admin dependencies
+  late final AdminViewModel adminViewModel;
 
   void init() {
     // Dictionary setup
@@ -94,5 +116,51 @@ class DependencyInjection {
 
     // ViewModel
     homeViewModel = HomeViewModel(getMenuItemsUseCase: getMenuItems);
+
+    // Teaching setup
+    // Data sources
+    final teachingMockDataSource = TeachingMockDataSource();
+
+    // Repository
+    final TeachingRepository teachingRepository = TeachingRepositoryImpl(
+      mockDataSource: teachingMockDataSource,
+    );
+
+    // Use cases
+    final getTeachingModules = GetTeachingModules(teachingRepository);
+    final getTeachingModuleById = GetTeachingModuleById(teachingRepository);
+
+    // ViewModel
+    teachingViewModel = TeachingViewModel(
+      getTeachingModulesUseCase: getTeachingModules,
+      getTeachingModuleByIdUseCase: getTeachingModuleById,
+    );
+
+    // Admin setup
+    // Data sources
+    final adminMockDataSource = AdminMockDataSource();
+
+    // Repository
+    final AdminRepository adminRepository = AdminRepositoryImpl(
+      mockDataSource: adminMockDataSource,
+    );
+
+    // Use cases
+    final addWord = AddWord(adminRepository);
+    final updateWord = UpdateWord(adminRepository);
+    final deleteWord = DeleteWord(adminRepository);
+    final addModule = AddModule(adminRepository);
+    final updateModule = UpdateModule(adminRepository);
+    final deleteModule = DeleteModule(adminRepository);
+
+    // ViewModel
+    adminViewModel = AdminViewModel(
+      addWordUseCase: addWord,
+      updateWordUseCase: updateWord,
+      deleteWordUseCase: deleteWord,
+      addModuleUseCase: addModule,
+      updateModuleUseCase: updateModule,
+      deleteModuleUseCase: deleteModule,
+    );
   }
 }

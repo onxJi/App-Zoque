@@ -26,6 +26,8 @@ void main() async {
         ChangeNotifierProvider.value(value: di.dictionaryViewModel),
         ChangeNotifierProvider.value(value: di.newsViewModel),
         ChangeNotifierProvider.value(value: di.homeViewModel),
+        ChangeNotifierProvider.value(value: di.teachingViewModel),
+        ChangeNotifierProvider.value(value: di.adminViewModel),
       ],
       child: const MyApp(),
     ),
