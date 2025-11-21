@@ -1,6 +1,7 @@
 import 'package:appzoque/presentation/auth/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -65,9 +66,9 @@ class AuthScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       final success = await authProvider.signInWithGoogle();
-                      if (success) {
-                        // Navegar a Home
-                        Navigator.of(context).pushReplacementNamed('/home');
+                      if (success && context.mounted) {
+                        // Navegar a Home usando go_router
+                        context.go('/home');
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -76,8 +77,8 @@ class AuthScreen extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(
-                          color: const Color(0xFF1E92A1),
+                        side: const BorderSide(
+                          color: Color(0xFF1E92A1),
                           width: 1,
                         ),
                       ),

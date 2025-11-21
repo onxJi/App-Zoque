@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Comunidad Zoque',
       theme: AppTheme().theme(),
+      debugShowCheckedModeBanner: false,
       routerConfig: _router,
     );
   }

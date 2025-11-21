@@ -1,0 +1,224 @@
+[
+  {
+    "id": "1",
+    "wordZoque": "jama",
+    "wordSpanish": "agua",
+    "pronunciation": "ha-ma",
+    "category": "sustantivo",
+    "examples": [
+      {
+        "zoque": "Jama tum",
+        "spanish": "Agua limpia"
+      },
+      {
+        "zoque": "Jama wäy",
+        "spanish": "Agua fría"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "2",
+    "wordZoque": "tsakam",
+    "wordSpanish": "aprender",
+    "pronunciation": "tsa-kam",
+    "category": "verbo",
+    "examples": [
+      {
+        "zoque": "Tsakam wäy jama",
+        "spanish": "Aprender el idioma"
+      },
+      {
+        "zoque": "Tsakam pät'äk",
+        "spanish": "Aprender a trabajar"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "3",
+    "wordZoque": "wäy",
+    "wordSpanish": "idioma, lengua",
+    "pronunciation": "wäi",
+    "category": "sustantivo",
+    "examples": [
+      {
+        "zoque": "Wäy zoque",
+        "spanish": "Idioma zoque"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "4",
+    "wordZoque": "pät'äk",
+    "wordSpanish": "trabajo",
+    "pronunciation": "pät-äk",
+    "category": "sustantivo",
+    "examples": [
+      {
+        "zoque": "Pät'äk tum",
+        "spanish": "Buen trabajo"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "5",
+    "wordZoque": "tum",
+    "wordSpanish": "bueno, limpio",
+    "pronunciation": "tum",
+    "category": "adjetivo",
+    "examples": [
+      {
+        "zoque": "Jama tum",
+        "spanish": "Agua limpia"
+      },
+      {
+        "zoque": "Pät'äk tum",
+        "spanish": "Buen trabajo"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "6",
+    "wordZoque": "shük",
+    "wordSpanish": "día",
+    "pronunciation": "shük",
+    "category": "sustantivo",
+    "examples": [
+      {
+        "zoque": "Shük tsoon",
+        "spanish": "Día especial"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "7",
+    "wordZoque": "tsoon",
+    "wordSpanish": "especial, importante",
+    "pronunciation": "tsoon",
+    "category": "adjetivo",
+    "examples": [
+      {
+        "zoque": "Shük tsoon xöö kax ta jna",
+        "spanish": "Día especial de la lengua"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "8",
+    "wordZoque": "xöö",
+    "wordSpanish": "de, desde",
+    "pronunciation": "xöö",
+    "category": "preposición",
+    "examples": [
+      {
+        "zoque": "Xöö kax ta jna",
+        "spanish": "De nuestra tierra"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "9",
+    "wordZoque": "kax",
+    "wordSpanish": "nuestro, nuestra",
+    "pronunciation": "kax",
+    "category": "pronombre",
+    "examples": [
+      {
+        "zoque": "Kax ta jna",
+        "spanish": "Nuestra tierra"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "10",
+    "wordZoque": "jna",
+    "wordSpanish": "tierra, lugar",
+    "pronunciation": "jna",
+    "category": "sustantivo",
+    "examples": [
+      {
+        "zoque": "Kax ta jna",
+        "spanish": "Nuestra tierra"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "11",
+    "wordZoque": "mama",
+    "wordSpanish": "madre",
+    "pronunciation": "ma-ma",
+    "category": "sustantivo",
+    "examples": [
+      {
+        "zoque": "Mama tum",
+        "spanish": "Buena madre"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "12",
+    "wordZoque": "tata",
+    "wordSpanish": "padre",
+    "pronunciation": "ta-ta",
+    "category": "sustantivo",
+    "examples": [
+      {
+        "zoque": "Tata pät'äk",
+        "spanish": "Padre trabajador"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "13",
+    "wordZoque": "nuku",
+    "wordSpanish": "hermano",
+    "pronunciation": "nu-ku",
+    "category": "sustantivo",
+    "examples": [
+      {
+        "zoque": "Nuku tum",
+        "spanish": "Buen hermano"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "14",
+    "wordZoque": "yomo",
+    "wordSpanish": "mujer",
+    "pronunciation": "yo-mo",
+    "category": "sustantivo",
+    "examples": [
+      {
+        "zoque": "Yomo tsoon",
+        "spanish": "Mujer importante"
+      }
+    ],
+    "audioUrl": null
+  },
+  {
+    "id": "15",
+    "wordZoque": "winik",
+    "wordSpanish": "hombre",
+    "pronunciation": "wi-nik",
+    "category": "sustantivo",
+    "examples": [
+      {
+        "zoque": "Winik pät'äk",
+        "spanish": "Hombre trabajador"
+      }
+    ],
+    "audioUrl": null
+  }
+]
