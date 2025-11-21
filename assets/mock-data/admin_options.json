@@ -1,0 +1,26 @@
+[
+    {
+        "id": "add_word",
+        "title": "Diccionario",
+        "subtitle": "Agregar palabras",
+        "icon": "book",
+        "color": "blue",
+        "route": "/admin/add-word"
+    },
+    {
+        "id": "add_module",
+        "title": "Enseñanza",
+        "subtitle": "Subir lecciones",
+        "icon": "school",
+        "color": "green",
+        "route": "/admin/add-module"
+    },
+    {
+        "id": "add_news",
+        "title": "Noticias",
+        "subtitle": "Publicar noticia",
+        "icon": "article",
+        "color": "orange",
+        "route": "/admin/add-news"
+    }
+]

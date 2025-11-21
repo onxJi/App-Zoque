@@ -2,11 +2,18 @@ import 'package:appzoque/features/dictionary/domain/entities/word.dart';
 import 'package:appzoque/features/teaching/domain/entities/teaching_module.dart';
 import 'package:appzoque/features/admin/domain/repositories/admin_repository.dart';
 import 'package:appzoque/features/admin/data/datasources/admin_mock_datasource.dart';
+import 'package:appzoque/features/admin/domain/entities/admin_action.dart';
+import 'package:appzoque/features/news/domain/entities/news_item.dart';
 
 class AdminRepositoryImpl implements AdminRepository {
   final AdminMockDataSource mockDataSource;
 
   AdminRepositoryImpl({required this.mockDataSource});
+
+  @override
+  Future<List<AdminAction>> getAdminActions() async {
+    return await mockDataSource.getAdminActions();
+  }
 
   @override
   Future<void> addWord(Word word) async {
@@ -36,5 +43,20 @@ class AdminRepositoryImpl implements AdminRepository {
   @override
   Future<void> deleteModule(String id) async {
     return await mockDataSource.deleteModule(id);
+  }
+
+  @override
+  Future<void> addNews(NewsItem newsItem) async {
+    return await mockDataSource.addNews(newsItem);
+  }
+
+  @override
+  Future<void> updateNews(String id, NewsItem newsItem) async {
+    return await mockDataSource.updateNews(id, newsItem);
+  }
+
+  @override
+  Future<void> deleteNews(String id) async {
+    return await mockDataSource.deleteNews(id);
   }
 }

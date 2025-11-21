@@ -27,12 +27,16 @@ import 'package:appzoque/features/teaching/presentation/viewmodels/teaching_view
 import 'package:appzoque/features/admin/data/datasources/admin_mock_datasource.dart';
 import 'package:appzoque/features/admin/data/repositories/admin_repository_impl.dart';
 import 'package:appzoque/features/admin/domain/repositories/admin_repository.dart';
+import 'package:appzoque/features/admin/domain/usecases/get_admin_actions.dart';
 import 'package:appzoque/features/admin/domain/usecases/add_word.dart';
 import 'package:appzoque/features/admin/domain/usecases/update_word.dart';
 import 'package:appzoque/features/admin/domain/usecases/delete_word.dart';
 import 'package:appzoque/features/admin/domain/usecases/add_module.dart';
 import 'package:appzoque/features/admin/domain/usecases/update_module.dart';
 import 'package:appzoque/features/admin/domain/usecases/delete_module.dart';
+import 'package:appzoque/features/admin/domain/usecases/add_news.dart';
+import 'package:appzoque/features/admin/domain/usecases/update_news.dart';
+import 'package:appzoque/features/admin/domain/usecases/delete_news.dart';
 import 'package:appzoque/features/admin/presentation/viewmodels/admin_viewmodel.dart';
 import 'package:http/http.dart' as http;
 
@@ -146,21 +150,29 @@ class DependencyInjection {
     );
 
     // Use cases
+    final getAdminActions = GetAdminActions(adminRepository);
     final addWord = AddWord(adminRepository);
     final updateWord = UpdateWord(adminRepository);
     final deleteWord = DeleteWord(adminRepository);
     final addModule = AddModule(adminRepository);
     final updateModule = UpdateModule(adminRepository);
     final deleteModule = DeleteModule(adminRepository);
+    final addNews = AddNews(adminRepository);
+    final updateNews = UpdateNews(adminRepository);
+    final deleteNews = DeleteNews(adminRepository);
 
     // ViewModel
     adminViewModel = AdminViewModel(
+      getAdminActionsUseCase: getAdminActions,
       addWordUseCase: addWord,
       updateWordUseCase: updateWord,
       deleteWordUseCase: deleteWord,
       addModuleUseCase: addModule,
       updateModuleUseCase: updateModule,
       deleteModuleUseCase: deleteModule,
+      addNewsUseCase: addNews,
+      updateNewsUseCase: updateNews,
+      deleteNewsUseCase: deleteNews,
     );
   }
 }
