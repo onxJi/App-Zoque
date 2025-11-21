@@ -24,6 +24,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider.value(value: di.dictionaryViewModel),
+        ChangeNotifierProvider.value(value: di.newsViewModel),
+        ChangeNotifierProvider.value(value: di.homeViewModel),
       ],
       child: const MyApp(),
     ),

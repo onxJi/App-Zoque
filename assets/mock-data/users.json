@@ -1,0 +1,12 @@
+[
+    {
+        "email": "admin@appzoque.com",
+        "username": "Admin User",
+        "idRole": 1
+    },
+    {
+        "email": "user@appzoque.com",
+        "username": "Normal User",
+        "idRole": 2
+    }
+]

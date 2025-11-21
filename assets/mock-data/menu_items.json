@@ -1,0 +1,38 @@
+[
+    {
+        "id": "news",
+        "label": "Noticias",
+        "icon": "article_outlined",
+        "activeIcon": "article",
+        "route": "/news",
+        "requiredRoleId": null,
+        "order": 1
+    },
+    {
+        "id": "teaching",
+        "label": "Enseñanza",
+        "icon": "school_outlined",
+        "activeIcon": "school",
+        "route": "/teaching",
+        "requiredRoleId": null,
+        "order": 2
+    },
+    {
+        "id": "dictionary",
+        "label": "Diccionario",
+        "icon": "menu_book_outlined",
+        "activeIcon": "menu_book",
+        "route": "/dictionary",
+        "requiredRoleId": null,
+        "order": 3
+    },
+    {
+        "id": "admin",
+        "label": "Admin",
+        "icon": "admin_panel_settings_outlined",
+        "activeIcon": "admin_panel_settings",
+        "route": "/admin",
+        "requiredRoleId": 1,
+        "order": 4
+    }
+]

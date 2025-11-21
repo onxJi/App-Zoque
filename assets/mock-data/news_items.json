@@ -1,0 +1,52 @@
+[
+    {
+        "id": "1",
+        "titleSpanish": "Enséñame tu idioma",
+        "titleZoque": "Tsakam wäy jama",
+        "description": "Fernando Sánchez, cantautor Zoque de San Miguel Chimalapas, comparte la belleza de la lengua zoque a través de la música. En esta emotiva canción, nos invita a conocer y preservar el idioma ancestral de su pueblo.",
+        "youtubeVideoId": "XJvI1IzWCHw",
+        "thumbnailUrl": null,
+        "publishedDate": "2024-01-15T00:00:00.000Z",
+        "category": "Música"
+    },
+    {
+        "id": "2",
+        "titleSpanish": "Celebración del Día de la Lengua Zoque",
+        "titleZoque": "Shük tsoon xöö kax ta jna",
+        "description": "La comunidad zoque celebra un día especial dedicado a preservar y promover su lengua ancestral con diversas actividades culturales, talleres y presentaciones artísticas.",
+        "youtubeVideoId": "XJvI1IzWCHw",
+        "thumbnailUrl": null,
+        "publishedDate": "2024-02-20T00:00:00.000Z",
+        "category": "Cultura"
+    },
+    {
+        "id": "3",
+        "titleSpanish": "Taller de Artesanías Tradicionales",
+        "titleZoque": "Wäy tsakam pät'äk",
+        "description": "Artesanos zoques comparten sus conocimientos sobre técnicas tradicionales de tejido y cerámica con las nuevas generaciones, manteniendo vivas las tradiciones ancestrales.",
+        "youtubeVideoId": "XJvI1IzWCHw",
+        "thumbnailUrl": null,
+        "publishedDate": "2024-03-10T00:00:00.000Z",
+        "category": "Artesanía"
+    },
+    {
+        "id": "4",
+        "titleSpanish": "Festival de Música Autóctona",
+        "titleZoque": "Jama tum pät'äk",
+        "description": "Músicos de diferentes comunidades zoques se reúnen para compartir melodías tradicionales y crear nuevas composiciones que fusionan lo ancestral con lo contemporáneo.",
+        "youtubeVideoId": "XJvI1IzWCHw",
+        "thumbnailUrl": null,
+        "publishedDate": "2024-04-05T00:00:00.000Z",
+        "category": "Música"
+    },
+    {
+        "id": "5",
+        "titleSpanish": "Rescate de Recetas Ancestrales",
+        "titleZoque": "Tsakam wäy jama",
+        "description": "Cocineras tradicionales enseñan la preparación de platillos zoques que han pasado de generación en generación, preservando los sabores y técnicas culinarias ancestrales.",
+        "youtubeVideoId": "XJvI1IzWCHw",
+        "thumbnailUrl": null,
+        "publishedDate": "2024-05-12T00:00:00.000Z",
+        "category": "Gastronomía"
+    }
+]
