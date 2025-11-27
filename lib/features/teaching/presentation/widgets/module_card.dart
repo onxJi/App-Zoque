@@ -105,8 +105,6 @@ class ModuleCard extends StatelessWidget {
                             color: Theme.of(context).colorScheme.onSurface,
                             height: 1.3,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Container(
@@ -165,8 +163,6 @@ class ModuleCard extends StatelessWidget {
                       ).colorScheme.onSurface.withOpacity(0.7),
                       height: 1.5,
                     ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),

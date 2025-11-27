@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:appzoque/features/admin/presentation/viewmodels/admin_viewmodel.dart';
-import 'add_word_screen.dart';
-import 'add_module_screen.dart';
-import 'add_news_screen.dart';
+import 'package:appzoque/features/admin/presentation/screens/manage_words_screen.dart';
+import 'package:appzoque/features/admin/presentation/screens/manage_modules_screen.dart';
+import 'package:appzoque/features/admin/presentation/screens/manage_news_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -55,11 +55,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   Widget _getScreenForRoute(String route) {
     switch (route) {
       case '/admin/add-word':
-        return const AddWordScreen();
+        return const ManageWordsScreen();
       case '/admin/add-module':
-        return const AddModuleScreen();
+        return const ManageModulesScreen();
       case '/admin/add-news':
-        return const AddNewsScreen();
+        return const ManageNewsScreen();
       default:
         return const Scaffold(
           body: Center(child: Text('Pantalla no encontrada')),

@@ -39,15 +39,10 @@ class _TeachingListScreenState extends State<TeachingListScreen> {
 
           return RefreshIndicator(
             onRefresh: () => viewModel.loadModules(),
-            child: GridView.builder(
+            child: ListView.separated(
               padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1, // Adjust for responsiveness later if needed
-                childAspectRatio: 1.1, // Adjust based on card design
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-              ),
               itemCount: viewModel.modules.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 16),
               itemBuilder: (context, index) {
                 final module = viewModel.modules[index];
                 return ModuleCard(
