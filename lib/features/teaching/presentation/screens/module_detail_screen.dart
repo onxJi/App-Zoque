@@ -1,4 +1,5 @@
 import 'package:appzoque/features/teaching/domain/entities/teaching_module.dart';
+import 'package:appzoque/features/teaching/presentation/screens/lesson_detail_screen.dart';
 import 'package:appzoque/features/teaching/presentation/widgets/lesson_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -111,12 +112,11 @@ class ModuleDetailScreen extends StatelessWidget {
                           lesson: lesson,
                           index: index,
                           onTap: () {
-                            // Navigate to lesson detail or play video
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Abriendo lección: ${lesson.title}',
-                                ),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    LessonDetailScreen(lesson: lesson),
                               ),
                             );
                           },
