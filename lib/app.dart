@@ -1,40 +1,63 @@
 import 'package:appzoque/core/themes/app_theme.dart';
 import 'package:appzoque/features/auth/providers/auth_provider.dart';
 import 'package:appzoque/features/auth/presentation/screens/auth_screen.dart';
+import 'package:appzoque/features/auth/presentation/screens/splash_screen.dart';
 import 'package:appzoque/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-final GoRouter _router = GoRouter(
-  initialLocation: '/',
-  routes: [
-    GoRoute(path: '/', builder: (context, state) => const AuthScreen()),
-    GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
-  ],
-  redirect: (context, state) {
-    final authProvider = context.read<AuthProvider>();
-    final location = state.uri.toString();
+// Función para crear el router con el AuthProvider
+GoRouter createRouter(AuthProvider authProvider) {
+  return GoRouter(
+    initialLocation: '/',
+    refreshListenable: authProvider, // Escuchar cambios en el AuthProvider
+    routes: [
+      GoRoute(path: '/', builder: (context, state) => const AuthScreen()),
+      GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
+    ],
+    redirect: (context, state) {
+      final location = state.uri.toString();
 
-    if (!authProvider.isSignedIn && location != '/') {
-      return '/';
-    } else if (authProvider.isSignedIn && location == '/') {
-      return '/home';
-    }
-    return null;
-  },
-);
+      // Si aún no se ha inicializado, mostrar pantalla de carga
+      if (!authProvider.isInitialized) {
+        return null; // Mantener en la ubicación actual mientras se inicializa
+      }
+
+      // Redirigir según el estado de autenticación
+      if (!authProvider.isSignedIn && location != '/') {
+        return '/'; // No autenticado -> ir al login
+      } else if (authProvider.isSignedIn && location == '/') {
+        return '/home'; // Autenticado en login -> ir al home
+      }
+
+      return null; // No redirigir
+    },
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthProvider>();
+
+    // Mostrar pantalla de carga mientras se inicializa
+    if (!authProvider.isInitialized) {
+      return MaterialApp(
+        title: 'Comunidad Zoque',
+        theme: AppTheme().theme(),
+        debugShowCheckedModeBanner: false,
+        home: const SplashScreen(),
+      );
+    }
+
     return MaterialApp.router(
       title: 'Comunidad Zoque',
       theme: AppTheme().theme(),
       debugShowCheckedModeBanner: false,
-      routerConfig: _router,
+      routerConfig: createRouter(authProvider),
     );
   }
 }
