@@ -12,6 +12,8 @@ class NewsListScreen extends StatefulWidget {
 }
 
 class _NewsListScreenState extends State<NewsListScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -19,6 +21,12 @@ class _NewsListScreenState extends State<NewsListScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<NewsViewModel>().loadNews();
     });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -68,26 +76,94 @@ class _NewsListScreenState extends State<NewsListScreen> {
 
         return Container(
           color: Colors.grey.shade50,
-          child: RefreshIndicator(
-            onRefresh: () => viewModel.loadNews(),
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: viewModel.newsItems.length,
-              itemBuilder: (context, index) {
-                final newsItem = viewModel.newsItems[index];
-                return NewsCard(
-                  newsItem: newsItem,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            NewsDetailScreen(newsItem: newsItem),
-                      ),
-                    );
+          child: Column(
+            children: [
+              // Search Bar
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    viewModel.searchNews(value);
                   },
-                );
-              },
-            ),
+                  decoration: InputDecoration(
+                    hintText: 'Buscar noticias...',
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: _searchController.text.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              viewModel.searchNews('');
+                            },
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: Colors.grey.shade300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Theme.of(context).primaryColor,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // News List
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () => viewModel.loadNews(),
+                  child: viewModel.newsItems.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search_off,
+                                size: 64,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'No se encontraron noticias',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          itemCount: viewModel.newsItems.length,
+                          itemBuilder: (context, index) {
+                            final newsItem = viewModel.newsItems[index];
+                            return NewsCard(
+                              newsItem: newsItem,
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        NewsDetailScreen(newsItem: newsItem),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
+              ),
+            ],
           ),
         );
       },

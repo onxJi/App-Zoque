@@ -18,6 +18,9 @@ class NewsViewModel extends ChangeNotifier {
   List<NewsItem> _newsItems = [];
   List<NewsItem> get newsItems => _newsItems;
 
+  // Store all items to support local filtering/search
+  List<NewsItem> _allNewsItems = [];
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -28,7 +31,7 @@ class NewsViewModel extends ChangeNotifier {
   String? get selectedCategory => _selectedCategory;
 
   List<String> get categories {
-    final categorySet = _newsItems.map((item) => item.category).toSet();
+    final categorySet = _allNewsItems.map((item) => item.category).toSet();
     return categorySet.toList()..sort();
   }
 
@@ -38,7 +41,8 @@ class NewsViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _newsItems = await getNewsUseCase();
+      _allNewsItems = await getNewsUseCase();
+      _newsItems = List.from(_allNewsItems);
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -56,10 +60,11 @@ class NewsViewModel extends ChangeNotifier {
 
     try {
       if (category == null || category.isEmpty) {
-        _newsItems = await getNewsUseCase();
+        _allNewsItems = await getNewsUseCase();
       } else {
-        _newsItems = await getNewsByCategoryUseCase(category);
+        _allNewsItems = await getNewsByCategoryUseCase(category);
       }
+      _newsItems = List.from(_allNewsItems);
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -67,6 +72,21 @@ class NewsViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void searchNews(String query) {
+    if (query.isEmpty) {
+      _newsItems = List.from(_allNewsItems);
+    } else {
+      final lowercaseQuery = query.toLowerCase();
+      _newsItems = _allNewsItems.where((item) {
+        return item.titleSpanish.toLowerCase().contains(lowercaseQuery) ||
+            item.titleZoque.toLowerCase().contains(lowercaseQuery) ||
+            item.description.toLowerCase().contains(lowercaseQuery) ||
+            item.category.toLowerCase().contains(lowercaseQuery);
+      }).toList();
+    }
+    notifyListeners();
   }
 
   Future<NewsItem?> getNewsItemById(String id) async {
