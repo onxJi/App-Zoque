@@ -1,4 +1,4 @@
-import 'package:appzoque/presentation/auth/services/auth_service.dart';
+import 'package:appzoque/features/auth/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 
 class AuthProvider extends ChangeNotifier {

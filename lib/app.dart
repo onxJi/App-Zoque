@@ -1,6 +1,6 @@
 import 'package:appzoque/core/themes/app_theme.dart';
-import 'package:appzoque/presentation/auth/providers/auth_provider.dart';
-import 'package:appzoque/presentation/auth/screens/auth_screen.dart';
+import 'package:appzoque/features/auth/providers/auth_provider.dart';
+import 'package:appzoque/features/auth/presentation/screens/auth_screen.dart';
 import 'package:appzoque/features/home/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

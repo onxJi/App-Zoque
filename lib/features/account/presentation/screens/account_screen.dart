@@ -1,5 +1,6 @@
-import 'package:appzoque/presentation/auth/providers/auth_provider.dart';
+import 'package:appzoque/features/auth/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +42,9 @@ class AccountScreen extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Theme.of(context).colorScheme.primary,
-                    Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                    Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.8),
                   ],
                 ),
               ),
@@ -80,7 +83,7 @@ class AccountScreen extends StatelessWidget {
                     userEmail,
                     style: GoogleFonts.inter(
                       fontSize: 14,
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha: 0.9),
                     ),
                   ),
                 ],
@@ -118,24 +121,6 @@ class AccountScreen extends StatelessWidget {
 
             // Sección: Preferencias
             _buildSectionHeader(context, 'Preferencias'),
-            _buildOptionTile(
-              context,
-              icon: Icons.dark_mode_outlined,
-              title: 'Modo Oscuro',
-              subtitle: 'Personaliza el tema de la app',
-              trailing: Switch(
-                value: false, // TODO: Conectar con provider de tema
-                onChanged: (value) {
-                  // TODO: Implementar cambio de tema
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Función próximamente disponible'),
-                    ),
-                  );
-                },
-              ),
-              onTap: null,
-            ),
             _buildOptionTile(
               context,
               icon: Icons.notifications_none,
@@ -188,7 +173,7 @@ class AccountScreen extends StatelessWidget {
                   context: context,
                   applicationName: 'App Zoque',
                   applicationVersion: '1.0.0',
-                  applicationLegalese: '© 2024 Comunidad Zoque',
+                  applicationLegalese: '© 2025 Comunidad Zoque',
                   children: [
                     const SizedBox(height: 16),
                     Text(
@@ -241,6 +226,10 @@ class AccountScreen extends StatelessWidget {
 
                     if (confirm == true && context.mounted) {
                       await authProvider.signOut();
+                      // Navegar al login después de cerrar sesión
+                      if (context.mounted) {
+                        context.go('/');
+                      }
                     }
                   },
                   icon: const Icon(Icons.logout, color: Colors.red),
@@ -296,7 +285,7 @@ class AccountScreen extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Icon(icon, color: Theme.of(context).colorScheme.primary),

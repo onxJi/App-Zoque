@@ -1,5 +1,5 @@
 import 'package:appzoque/app.dart';
-import 'package:appzoque/presentation/auth/providers/auth_provider.dart';
+import 'package:appzoque/features/auth/providers/auth_provider.dart';
 import 'package:appzoque/core/config/env_config.dart';
 import 'package:appzoque/core/di/dependency_injection.dart';
 import 'package:firebase_core/firebase_core.dart';

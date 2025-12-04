@@ -5,7 +5,7 @@ import 'package:appzoque/features/home/presentation/widgets/custom_bottom_nav.da
 import 'package:appzoque/features/home/presentation/widgets/dictionary_tab.dart';
 import 'package:appzoque/features/home/presentation/widgets/news_tab.dart';
 import 'package:appzoque/features/home/presentation/widgets/teaching_tab.dart';
-import 'package:appzoque/presentation/auth/providers/auth_provider.dart';
+import 'package:appzoque/features/auth/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
