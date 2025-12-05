@@ -1,4 +1,5 @@
 import 'package:appzoque/features/auth/providers/auth_provider.dart';
+import 'package:appzoque/core/services/preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -182,6 +183,26 @@ class AccountScreen extends StatelessWidget {
                     ),
                   ],
                 );
+              },
+            ),
+            _buildOptionTile(
+              context,
+              icon: Icons.replay_outlined,
+              title: 'Ver Tutorial de Inicio',
+              subtitle: 'Volver a ver la introducción',
+              onTap: () async {
+                final prefs = await PreferencesService.getInstance();
+                await prefs.resetFirstTime();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Tutorial reiniciado. Cierra y vuelve a abrir la app.',
+                      ),
+                      duration: Duration(seconds: 3),
+                    ),
+                  );
+                }
               },
             ),
 
