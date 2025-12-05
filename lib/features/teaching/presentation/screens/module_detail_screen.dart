@@ -1,3 +1,4 @@
+import 'package:appzoque/core/widgets/custom_sliver_appbar.dart';
 import 'package:appzoque/features/teaching/domain/entities/teaching_module.dart';
 import 'package:appzoque/features/teaching/presentation/screens/lesson_detail_screen.dart';
 import 'package:appzoque/features/teaching/presentation/widgets/lesson_tile.dart';
@@ -14,50 +15,11 @@ class ModuleDetailScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            expandedHeight: 200.0,
-            floating: false,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                module.title,
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  shadows: [
-                    const Shadow(
-                      offset: Offset(0, 1),
-                      blurRadius: 3.0,
-                      color: Colors.black54,
-                    ),
-                  ],
-                ),
-              ),
-              background: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.network(
-                    module.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(color: Colors.grey);
-                    },
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withOpacity(0.7),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          CustomSliverAppBar(
+            title: module.title,
+            imageUrl: module.imageUrl,
+            showBackButton: true,
+            onBackButtonPressed: () => Navigator.of(context).pop(),
           ),
           SliverToBoxAdapter(
             child: Padding(
