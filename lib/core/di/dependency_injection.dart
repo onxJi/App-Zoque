@@ -38,6 +38,11 @@ import 'package:appzoque/features/admin/domain/usecases/add_news.dart';
 import 'package:appzoque/features/admin/domain/usecases/update_news.dart';
 import 'package:appzoque/features/admin/domain/usecases/delete_news.dart';
 import 'package:appzoque/features/admin/presentation/viewmodels/admin_viewmodel.dart';
+import 'package:appzoque/features/auth/data/datasources/admin_auth_datasource.dart';
+import 'package:appzoque/features/auth/data/repositories/admin_auth_repository_impl.dart';
+import 'package:appzoque/features/auth/domain/usecases/verify_admin_user_usecase.dart';
+import 'package:appzoque/features/auth/providers/auth_provider.dart';
+import 'package:appzoque/features/auth/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 class DependencyInjection {
@@ -60,6 +65,9 @@ class DependencyInjection {
 
   // Admin dependencies
   late final AdminViewModel adminViewModel;
+
+  // Auth dependencies
+  late final AuthProvider authProvider;
 
   void init() {
     // Dictionary setup
@@ -173,6 +181,29 @@ class DependencyInjection {
       addNewsUseCase: addNews,
       updateNewsUseCase: updateNews,
       deleteNewsUseCase: deleteNews,
+    );
+
+    // Auth setup
+    // Services
+    final authService = AuthService();
+
+    // Data sources
+    final adminAuthDataSource = AdminAuthDataSourceImpl(client: http.Client());
+
+    // Repository
+    final adminAuthRepository = AdminAuthRepositoryImpl(
+      dataSource: adminAuthDataSource,
+    );
+
+    // Use cases
+    final verifyAdminUserUseCase = VerifyAdminUserUseCase(
+      repository: adminAuthRepository,
+    );
+
+    // Provider
+    authProvider = AuthProvider(
+      authService: authService,
+      verifyAdminUserUseCase: verifyAdminUserUseCase,
     );
   }
 }

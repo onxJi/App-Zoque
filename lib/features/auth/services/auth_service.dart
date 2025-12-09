@@ -35,4 +35,20 @@ class AuthService {
     await _googleSignIn.signOut();
     await _auth.signOut();
   }
+
+  /// Obtiene el ID Token del usuario actual para autenticación con el backend
+  /// Este token JWT de Google se usa para verificar si el usuario es admin
+  Future<String?> getIdToken() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) return null;
+
+      // Force refresh para asegurar que el token esté actualizado
+      final idToken = await user.getIdToken(true);
+      return idToken;
+    } catch (e) {
+      print('Error obteniendo ID Token: $e');
+      return null;
+    }
+  }
 }
