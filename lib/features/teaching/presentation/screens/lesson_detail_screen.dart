@@ -28,12 +28,14 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
         ),
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          _buildProgressIndicator(),
-          Expanded(child: _buildCurrentSection()),
-          _buildNavigationButtons(),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildProgressIndicator(),
+            Expanded(child: _buildCurrentSection()),
+            _buildNavigationButtons(),
+          ],
+        ),
       ),
     );
   }

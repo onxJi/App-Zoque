@@ -30,249 +30,251 @@ class AccountScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Header con foto de perfil
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).colorScheme.primary,
-                    Theme.of(
-                      context,
-                    ).colorScheme.primary.withValues(alpha: 0.8),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Header con foto de perfil
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(32),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(
+                        context,
+                      ).colorScheme.primary.withValues(alpha: 0.8),
+                    ],
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    // Foto de perfil
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.white,
+                      backgroundImage: userPhotoUrl != null
+                          ? NetworkImage(userPhotoUrl)
+                          : null,
+                      child: userPhotoUrl == null
+                          ? Icon(
+                              Icons.person,
+                              size: 50,
+                              color: Theme.of(context).colorScheme.primary,
+                            )
+                          : null,
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Nombre
+                    Text(
+                      userName,
+                      style: GoogleFonts.poppins(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+
+                    // Email
+                    Text(
+                      userEmail,
+                      style: GoogleFonts.inter(
+                        fontSize: 14,
+                        color: Colors.white.withValues(alpha: 0.9),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              child: Column(
-                children: [
-                  // Foto de perfil
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.white,
-                    backgroundImage: userPhotoUrl != null
-                        ? NetworkImage(userPhotoUrl)
-                        : null,
-                    child: userPhotoUrl == null
-                        ? Icon(
-                            Icons.person,
-                            size: 50,
-                            color: Theme.of(context).colorScheme.primary,
-                          )
-                        : null,
-                  ),
-                  const SizedBox(height: 16),
 
-                  // Nombre
-                  Text(
-                    userName,
-                    style: GoogleFonts.poppins(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-
-                  // Email
-                  Text(
-                    userEmail,
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      color: Colors.white.withValues(alpha: 0.9),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Sección: Cuenta
-            _buildSectionHeader(context, 'Cuenta'),
-            _buildOptionTile(
-              context,
-              icon: Icons.person_outline,
-              title: 'Editar Perfil',
-              subtitle: 'Actualiza tu información personal',
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Función próximamente disponible'),
-                  ),
-                );
-              },
-            ),
-            _buildOptionTile(
-              context,
-              icon: Icons.favorite_outline,
-              title: 'Favoritos',
-              subtitle: 'Noticias y palabras guardadas',
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Función próximamente disponible'),
-                  ),
-                );
-              },
-            ),
-
-            // Sección: Preferencias
-            _buildSectionHeader(context, 'Preferencias'),
-            _buildOptionTile(
-              context,
-              icon: Icons.notifications_none,
-              title: 'Notificaciones',
-              subtitle: 'Configura tus preferencias',
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Función próximamente disponible'),
-                  ),
-                );
-              },
-            ),
-            _buildOptionTile(
-              context,
-              icon: Icons.language,
-              title: 'Idioma',
-              subtitle: 'Español / Zoque',
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Función próximamente disponible'),
-                  ),
-                );
-              },
-            ),
-
-            // Sección: Soporte
-            _buildSectionHeader(context, 'Soporte'),
-            _buildOptionTile(
-              context,
-              icon: Icons.help_outline,
-              title: 'Ayuda y Soporte',
-              subtitle: '¿Necesitas ayuda?',
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Función próximamente disponible'),
-                  ),
-                );
-              },
-            ),
-            _buildOptionTile(
-              context,
-              icon: Icons.info_outline,
-              title: 'Acerca de',
-              subtitle: 'Versión 1.0.0',
-              onTap: () {
-                showAboutDialog(
-                  context: context,
-                  applicationName: 'App Zoque',
-                  applicationVersion: '1.0.0',
-                  applicationLegalese: '© 2025 Comunidad Zoque',
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(
-                      'Aplicación dedicada a preservar y promover la cultura y lengua zoque.',
-                      style: GoogleFonts.inter(fontSize: 14),
-                    ),
-                  ],
-                );
-              },
-            ),
-            _buildOptionTile(
-              context,
-              icon: Icons.replay_outlined,
-              title: 'Ver Tutorial de Inicio',
-              subtitle: 'Volver a ver la introducción',
-              onTap: () async {
-                final prefs = await PreferencesService.getInstance();
-                await prefs.resetFirstTime();
-                if (context.mounted) {
+              // Sección: Cuenta
+              _buildSectionHeader(context, 'Cuenta'),
+              _buildOptionTile(
+                context,
+                icon: Icons.person_outline,
+                title: 'Editar Perfil',
+                subtitle: 'Actualiza tu información personal',
+                onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text(
-                        'Tutorial reiniciado. Cierra y vuelve a abrir la app.',
-                      ),
-                      duration: Duration(seconds: 3),
+                      content: Text('Función próximamente disponible'),
                     ),
                   );
-                }
-              },
-            ),
+                },
+              ),
+              _buildOptionTile(
+                context,
+                icon: Icons.favorite_outline,
+                title: 'Favoritos',
+                subtitle: 'Noticias y palabras guardadas',
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Función próximamente disponible'),
+                    ),
+                  );
+                },
+              ),
 
-            const SizedBox(height: 32),
+              // Sección: Preferencias
+              _buildSectionHeader(context, 'Preferencias'),
+              _buildOptionTile(
+                context,
+                icon: Icons.notifications_none,
+                title: 'Notificaciones',
+                subtitle: 'Configura tus preferencias',
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Función próximamente disponible'),
+                    ),
+                  );
+                },
+              ),
+              _buildOptionTile(
+                context,
+                icon: Icons.language,
+                title: 'Idioma',
+                subtitle: 'Español / Zoque',
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Función próximamente disponible'),
+                    ),
+                  );
+                },
+              ),
 
-            // Botón de cerrar sesión
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: () async {
-                    final confirm = await showDialog<bool>(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(
-                          '¿Cerrar sesión?',
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+              // Sección: Soporte
+              _buildSectionHeader(context, 'Soporte'),
+              _buildOptionTile(
+                context,
+                icon: Icons.help_outline,
+                title: 'Ayuda y Soporte',
+                subtitle: '¿Necesitas ayuda?',
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Función próximamente disponible'),
+                    ),
+                  );
+                },
+              ),
+              _buildOptionTile(
+                context,
+                icon: Icons.info_outline,
+                title: 'Acerca de',
+                subtitle: 'Versión 1.0.0',
+                onTap: () {
+                  showAboutDialog(
+                    context: context,
+                    applicationName: 'App Zoque',
+                    applicationVersion: '1.0.0',
+                    applicationLegalese: '© 2025 Comunidad Zoque',
+                    children: [
+                      const SizedBox(height: 16),
+                      Text(
+                        'Aplicación dedicada a preservar y promover la cultura y lengua zoque.',
+                        style: GoogleFonts.inter(fontSize: 14),
+                      ),
+                    ],
+                  );
+                },
+              ),
+              _buildOptionTile(
+                context,
+                icon: Icons.replay_outlined,
+                title: 'Ver Tutorial de Inicio',
+                subtitle: 'Volver a ver la introducción',
+                onTap: () async {
+                  final prefs = await PreferencesService.getInstance();
+                  await prefs.resetFirstTime();
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
                         content: Text(
-                          '¿Estás seguro de que quieres cerrar sesión?',
-                          style: GoogleFonts.inter(),
+                          'Tutorial reiniciado. Cierra y vuelve a abrir la app.',
                         ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: const Text('Cancelar'),
-                          ),
-                          ElevatedButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              foregroundColor: Colors.white,
-                            ),
-                            child: const Text('Cerrar sesión'),
-                          ),
-                        ],
+                        duration: Duration(seconds: 3),
                       ),
                     );
+                  }
+                },
+              ),
 
-                    if (confirm == true && context.mounted) {
-                      await authProvider.signOut();
-                      // Navegar al login después de cerrar sesión
-                      if (context.mounted) {
-                        context.go('/');
+              const SizedBox(height: 32),
+
+              // Botón de cerrar sesión
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(
+                            '¿Cerrar sesión?',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          content: Text(
+                            '¿Estás seguro de que quieres cerrar sesión?',
+                            style: GoogleFonts.inter(),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: const Text('Cancelar'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => Navigator.of(context).pop(true),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                              ),
+                              child: const Text('Cerrar sesión'),
+                            ),
+                          ],
+                        ),
+                      );
+
+                      if (confirm == true && context.mounted) {
+                        await authProvider.signOut();
+                        // Navegar al login después de cerrar sesión
+                        if (context.mounted) {
+                          context.go('/');
+                        }
                       }
-                    }
-                  },
-                  icon: const Icon(Icons.logout, color: Colors.red),
-                  label: Text(
-                    'Cerrar Sesión',
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.red,
+                    },
+                    icon: const Icon(Icons.logout, color: Colors.red),
+                    label: Text(
+                      'Cerrar Sesión',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.red,
+                      ),
                     ),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    side: const BorderSide(color: Colors.red),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      side: const BorderSide(color: Colors.red),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 32),
-          ],
+              const SizedBox(height: 32),
+            ],
+          ),
         ),
       ),
     );
