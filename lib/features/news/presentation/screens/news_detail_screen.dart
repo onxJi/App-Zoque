@@ -47,7 +47,7 @@ class NewsDetailScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: Theme.of(
                                   context,
-                                ).colorScheme.primary.withOpacity(0.1),
+                                ).colorScheme.primary.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Row(
@@ -111,17 +111,17 @@ class NewsDetailScreen extends StatelessWidget {
                               colors: [
                                 Theme.of(
                                   context,
-                                ).colorScheme.primary.withOpacity(0.1),
+                                ).colorScheme.primary.withValues(alpha: 0.1),
                                 Theme.of(
                                   context,
-                                ).colorScheme.secondary.withOpacity(0.1),
+                                ).colorScheme.secondary.withValues(alpha: 0.1),
                               ],
                             ),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: Theme.of(
                                 context,
-                              ).colorScheme.primary.withOpacity(0.2),
+                              ).colorScheme.primary.withValues(alpha: 0.2),
                             ),
                           ),
                           child: Column(
@@ -172,7 +172,7 @@ class NewsDetailScreen extends StatelessWidget {
                             fontSize: 16,
                             color: Theme.of(
                               context,
-                            ).colorScheme.onSurface.withOpacity(0.8),
+                            ).colorScheme.onSurface.withValues(alpha: 0.8),
                             height: 1.6,
                           ),
                         ),

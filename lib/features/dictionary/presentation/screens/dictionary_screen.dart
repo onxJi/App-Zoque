@@ -30,7 +30,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Theme.of(context).colorScheme.primary.withOpacity(0.05),
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
             Colors.white,
           ],
         ),

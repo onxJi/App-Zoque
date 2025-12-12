@@ -1,6 +1,8 @@
 import 'package:appzoque/features/teaching/domain/entities/teaching_lesson.dart';
+import 'package:appzoque/features/admob/presentation/providers/admob_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class LessonDetailScreen extends StatefulWidget {
   final TeachingLesson lesson;
@@ -44,7 +46,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         border: Border(
           bottom: BorderSide(color: Colors.grey.shade200, width: 1),
         ),
@@ -272,7 +274,9 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -429,7 +433,9 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
       backgroundColor = Colors.red.shade50;
       borderColor = Colors.red.shade400;
     } else if (isSelected) {
-      backgroundColor = Theme.of(context).colorScheme.primary.withOpacity(0.1);
+      backgroundColor = Theme.of(
+        context,
+      ).colorScheme.primary.withValues(alpha: 0.1);
       borderColor = Theme.of(context).colorScheme.primary;
     }
 
@@ -534,7 +540,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -5),
           ),
@@ -657,7 +663,7 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
     }
   }
 
-  void _finishLesson() {
+  void _finishLesson() async {
     final correctAnswers = _userAnswers.values
         .where(
           (answer) =>
@@ -666,6 +672,32 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
         .length;
     final totalExercises = widget.lesson.exercises.length;
     final score = (correctAnswers / totalExercises * 100).round();
+
+    // Mostrar anuncio intersticial al finalizar la lección
+    try {
+      final adMobProvider = context.read<AdMobProvider>();
+      print('🎯 Lección completada: Cargando anuncio...');
+
+      // Cargar el anuncio
+      await adMobProvider.loadInterstitialAd();
+
+      // Esperar un poco
+      await Future.delayed(const Duration(seconds: 2));
+
+      // Mostrar si está listo
+      if (adMobProvider.isInterstitialAdReady) {
+        print('📺 Mostrando anuncio de fin de lección...');
+        await adMobProvider.showInterstitialAd();
+      } else {
+        print('⚠️ Anuncio no disponible, continuando...');
+      }
+    } catch (e) {
+      print('❌ Error al mostrar anuncio: $e');
+      // Continuar aunque falle el anuncio
+    }
+
+    // Mostrar diálogo de resultados
+    if (!mounted) return;
 
     showDialog(
       context: context,

@@ -118,7 +118,7 @@ class _ManageModulesScreenState extends State<ManageModulesScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Theme.of(context).colorScheme.primary.withOpacity(0.05),
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
               Colors.white,
             ],
           ),
@@ -297,9 +297,8 @@ class _ManageModulesScreenState extends State<ManageModulesScreen> {
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary.withOpacity(0.1),
+                                    color: Theme.of(context).colorScheme.primary
+                                        .withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(

@@ -43,6 +43,10 @@ import 'package:appzoque/features/auth/data/repositories/admin_auth_repository_i
 import 'package:appzoque/features/auth/domain/usecases/verify_admin_user_usecase.dart';
 import 'package:appzoque/features/auth/providers/auth_provider.dart';
 import 'package:appzoque/features/auth/services/auth_service.dart';
+import 'package:appzoque/features/admob/data/datasources/admob_data_source.dart';
+import 'package:appzoque/features/admob/data/repositories/ad_repository_impl.dart';
+import 'package:appzoque/features/admob/domain/repositories/ad_repository.dart';
+import 'package:appzoque/features/admob/presentation/providers/admob_provider.dart';
 import 'package:http/http.dart' as http;
 
 class DependencyInjection {
@@ -68,6 +72,9 @@ class DependencyInjection {
 
   // Auth dependencies
   late final AuthProvider authProvider;
+
+  // AdMob dependencies
+  late final AdMobProvider adMobProvider;
 
   void init() {
     // Dictionary setup
@@ -205,5 +212,15 @@ class DependencyInjection {
       authService: authService,
       verifyAdminUserUseCase: verifyAdminUserUseCase,
     );
+
+    // AdMob setup
+    // Data sources
+    final adMobDataSource = AdMobDataSource();
+
+    // Repository
+    final AdRepository adRepository = AdRepositoryImpl(adMobDataSource);
+
+    // Provider
+    adMobProvider = AdMobProvider(adRepository);
   }
 }

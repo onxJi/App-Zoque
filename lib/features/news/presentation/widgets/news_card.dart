@@ -13,7 +13,7 @@ class NewsCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 3,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onTap,
@@ -46,10 +46,10 @@ class NewsCard extends StatelessWidget {
                             colors: [
                               Theme.of(
                                 context,
-                              ).colorScheme.primary.withOpacity(0.3),
+                              ).colorScheme.primary.withValues(alpha: 0.3),
                               Theme.of(
                                 context,
-                              ).colorScheme.secondary.withOpacity(0.3),
+                              ).colorScheme.secondary.withValues(alpha: 0.3),
                             ],
                           ),
                         ),
@@ -58,7 +58,7 @@ class NewsCard extends StatelessWidget {
                           size: 64,
                           color: Theme.of(
                             context,
-                          ).colorScheme.primary.withOpacity(0.5),
+                          ).colorScheme.primary.withValues(alpha: 0.5),
                         ),
                       );
                     },
@@ -89,7 +89,7 @@ class NewsCard extends StatelessWidget {
                           end: Alignment.bottomCenter,
                           colors: [
                             Colors.transparent,
-                            Colors.black.withOpacity(0.3),
+                            Colors.black.withValues(alpha: 0.3),
                           ],
                         ),
                       ),
@@ -97,7 +97,7 @@ class NewsCard extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
+                            color: Colors.black.withValues(alpha: 0.6),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
@@ -128,7 +128,7 @@ class NewsCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Theme.of(
                         context,
-                      ).colorScheme.secondary.withOpacity(0.15),
+                      ).colorScheme.secondary.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -165,7 +165,7 @@ class NewsCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Theme.of(
                         context,
-                      ).colorScheme.primary.withOpacity(0.1),
+                      ).colorScheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -187,7 +187,7 @@ class NewsCard extends StatelessWidget {
                       fontSize: 14,
                       color: Theme.of(
                         context,
-                      ).colorScheme.onSurface.withOpacity(0.7),
+                      ).colorScheme.onSurface.withValues(alpha: 0.7),
                       height: 1.5,
                     ),
                     maxLines: 3,

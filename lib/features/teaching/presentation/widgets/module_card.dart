@@ -12,7 +12,7 @@ class ModuleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 3,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onTap,
@@ -65,7 +65,7 @@ class ModuleCard extends StatelessWidget {
                           end: Alignment.bottomCenter,
                           colors: [
                             Colors.transparent,
-                            Colors.black.withOpacity(0.3),
+                            Colors.black.withValues(alpha: 0.3),
                           ],
                         ),
                       ),
@@ -73,7 +73,7 @@ class ModuleCard extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
+                            color: Colors.black.withValues(alpha: 0.6),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
@@ -115,7 +115,7 @@ class ModuleCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(
                             context,
-                          ).colorScheme.primary.withOpacity(0.1),
+                          ).colorScheme.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -139,7 +139,7 @@ class ModuleCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: Theme.of(
                         context,
-                      ).colorScheme.primary.withOpacity(0.1),
+                      ).colorScheme.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -160,7 +160,7 @@ class ModuleCard extends StatelessWidget {
                       fontSize: 14,
                       color: Theme.of(
                         context,
-                      ).colorScheme.onSurface.withOpacity(0.7),
+                      ).colorScheme.onSurface.withValues(alpha: 0.7),
                       height: 1.5,
                     ),
                   ),

@@ -19,6 +19,9 @@ void main() async {
   final di = DependencyInjection();
   di.init();
 
+  // Initialize AdMob
+  await di.adMobProvider.initialize();
+
   runApp(
     MultiProvider(
       providers: [
@@ -28,6 +31,7 @@ void main() async {
         ChangeNotifierProvider.value(value: di.homeViewModel),
         ChangeNotifierProvider.value(value: di.teachingViewModel),
         ChangeNotifierProvider.value(value: di.adminViewModel),
+        ChangeNotifierProvider.value(value: di.adMobProvider),
       ],
       child: const MyApp(),
     ),

@@ -64,7 +64,9 @@ class _YoutubePlayerWidgetState extends State<YoutubePlayerWidget> {
         progressColors: ProgressBarColors(
           playedColor: Theme.of(context).colorScheme.primary,
           handleColor: Theme.of(context).colorScheme.primary,
-          bufferedColor: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+          bufferedColor: Theme.of(
+            context,
+          ).colorScheme.primary.withValues(alpha: 0.3),
           backgroundColor: Colors.grey.shade300,
         ),
         onReady: () {

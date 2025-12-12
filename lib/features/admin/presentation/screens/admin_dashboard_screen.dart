@@ -5,6 +5,7 @@ import 'package:appzoque/features/admin/presentation/viewmodels/admin_viewmodel.
 import 'package:appzoque/features/admin/presentation/screens/manage_words_screen.dart';
 import 'package:appzoque/features/admin/presentation/screens/manage_modules_screen.dart';
 import 'package:appzoque/features/admin/presentation/screens/manage_news_screen.dart';
+import 'package:appzoque/features/admob/presentation/screens/admob_debug_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -76,7 +77,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Theme.of(context).colorScheme.primary.withOpacity(0.05),
+              Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
               Colors.white,
             ],
           ),
@@ -183,7 +184,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [color.withOpacity(0.1), color.withOpacity(0.05)],
+              colors: [
+                color.withValues(alpha: 0.1),
+                color.withValues(alpha: 0.05),
+              ],
             ),
           ),
           child: Column(
@@ -192,7 +196,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
+                  color: color.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, size: 40, color: color),
