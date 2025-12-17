@@ -31,6 +31,7 @@ void main() async {
         ChangeNotifierProvider.value(value: di.homeViewModel),
         ChangeNotifierProvider.value(value: di.teachingViewModel),
         ChangeNotifierProvider.value(value: di.adminViewModel),
+        ChangeNotifierProvider.value(value: di.favoritesViewModel),
         ChangeNotifierProvider.value(value: di.adMobProvider),
       ],
       child: const MyApp(),

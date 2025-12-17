@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:appzoque/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import '../../domain/entities/word.dart';
 import '../screens/word_detail_screen.dart';
 
@@ -10,6 +12,9 @@ class WordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final favoritesVm = context.watch<FavoritesViewModel>();
+    final isFavorite = favoritesVm.isWordFavorite(word.id);
+
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
@@ -102,10 +107,42 @@ class WordCard extends StatelessWidget {
               ),
 
               // Arrow icon
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-                color: Colors.grey.shade400,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: favoritesVm.isLoading
+                        ? null
+                        : () async {
+                            await favoritesVm.toggleWordFavorite(word.id);
+                            if (!context.mounted) return;
+                            if (favoritesVm.successMessage != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(favoritesVm.successMessage!),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            } else if (favoritesVm.error != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(favoritesVm.error!),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          },
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.red : Colors.grey.shade600,
+                    ),
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                    color: Colors.grey.shade400,
+                  ),
+                ],
               ),
             ],
           ),

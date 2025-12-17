@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:appzoque/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import '../../domain/entities/word.dart';
 
 class WordDetailScreen extends StatelessWidget {
@@ -9,6 +11,9 @@ class WordDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final favoritesVm = context.watch<FavoritesViewModel>();
+    final isFavorite = favoritesVm.isWordFavorite(word.id);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -16,6 +21,35 @@ class WordDetailScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        actions: [
+          IconButton(
+            onPressed: favoritesVm.isLoading
+                ? null
+                : () async {
+                    await favoritesVm.toggleWordFavorite(word.id);
+                    if (!context.mounted) return;
+                    if (favoritesVm.successMessage != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(favoritesVm.successMessage!),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    } else if (favoritesVm.error != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(favoritesVm.error!),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  },
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: isFavorite ? Colors.red : Colors.white,
+            ),
+          ),
+        ],
         title: Text(
           'Detalle de Palabra',
           style: GoogleFonts.poppins(

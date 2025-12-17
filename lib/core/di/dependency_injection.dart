@@ -49,6 +49,17 @@ import 'package:appzoque/features/admob/data/datasources/admob_data_source.dart'
 import 'package:appzoque/features/admob/data/repositories/ad_repository_impl.dart';
 import 'package:appzoque/features/admob/domain/repositories/ad_repository.dart';
 import 'package:appzoque/features/admob/presentation/providers/admob_provider.dart';
+import 'package:appzoque/features/favorites/data/datasources/favorites_in_memory_store.dart';
+import 'package:appzoque/features/favorites/data/datasources/favorites_mock_datasource.dart';
+import 'package:appzoque/features/favorites/data/repositories/favorites_repository_impl.dart';
+import 'package:appzoque/features/favorites/domain/repositories/favorites_repository.dart';
+import 'package:appzoque/features/favorites/domain/usecases/add_news_favorite.dart';
+import 'package:appzoque/features/favorites/domain/usecases/add_word_favorite.dart';
+import 'package:appzoque/features/favorites/domain/usecases/get_favorite_news_ids.dart';
+import 'package:appzoque/features/favorites/domain/usecases/get_favorite_word_ids.dart';
+import 'package:appzoque/features/favorites/domain/usecases/remove_news_favorite.dart';
+import 'package:appzoque/features/favorites/domain/usecases/remove_word_favorite.dart';
+import 'package:appzoque/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'package:http/http.dart' as http;
 
 class DependencyInjection {
@@ -71,6 +82,9 @@ class DependencyInjection {
 
   // Admin dependencies
   late final AdminViewModel adminViewModel;
+
+  // Favorites dependencies
+  late final FavoritesViewModel favoritesViewModel;
 
   // Auth dependencies
   late final AuthProvider authProvider;
@@ -227,5 +241,33 @@ class DependencyInjection {
 
     // Provider
     adMobProvider = AdMobProvider(adRepository);
+
+    // Favorites setup
+    // Data sources
+    final favoritesStore = FavoritesInMemoryStore();
+    final favoritesMockDataSource = FavoritesMockDataSource(store: favoritesStore);
+
+    // Repository
+    final FavoritesRepository favoritesRepository = FavoritesRepositoryImpl(
+      mockDataSource: favoritesMockDataSource,
+    );
+
+    // Use cases
+    final getFavoriteNewsIds = GetFavoriteNewsIds(favoritesRepository);
+    final getFavoriteWordIds = GetFavoriteWordIds(favoritesRepository);
+    final addNewsFavorite = AddNewsFavorite(favoritesRepository);
+    final removeNewsFavorite = RemoveNewsFavorite(favoritesRepository);
+    final addWordFavorite = AddWordFavorite(favoritesRepository);
+    final removeWordFavorite = RemoveWordFavorite(favoritesRepository);
+
+    // ViewModel
+    favoritesViewModel = FavoritesViewModel(
+      getFavoriteNewsIdsUseCase: getFavoriteNewsIds,
+      getFavoriteWordIdsUseCase: getFavoriteWordIds,
+      addNewsFavoriteUseCase: addNewsFavorite,
+      removeNewsFavoriteUseCase: removeNewsFavorite,
+      addWordFavoriteUseCase: addWordFavorite,
+      removeWordFavoriteUseCase: removeWordFavorite,
+    );
   }
 }

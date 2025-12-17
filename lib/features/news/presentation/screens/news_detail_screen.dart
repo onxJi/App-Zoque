@@ -1,8 +1,10 @@
 import 'package:appzoque/core/widgets/custom_sliver_appbar.dart';
+import 'package:appzoque/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 import 'package:appzoque/features/news/domain/entities/news_item.dart';
 import 'package:appzoque/features/news/presentation/widgets/youtube_player_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class NewsDetailScreen extends StatelessWidget {
   final NewsItem newsItem;
@@ -11,6 +13,9 @@ class NewsDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final favoritesVm = context.watch<FavoritesViewModel>();
+    final isFavorite = favoritesVm.isNewsFavorite(newsItem.id);
+
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -214,18 +219,41 @@ class NewsDetailScreen extends StatelessWidget {
                             const SizedBox(width: 12),
                             Expanded(
                               child: ElevatedButton.icon(
-                                onPressed: () {
-                                  // TODO: Implementar favoritos
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Agregado a favoritos'),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.favorite_border),
+                                onPressed: favoritesVm.isLoading
+                                    ? null
+                                    : () async {
+                                        await favoritesVm.toggleNewsFavorite(
+                                          newsItem.id,
+                                        );
+                                        if (!context.mounted) return;
+                                        if (favoritesVm.successMessage !=
+                                            null) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                favoritesVm.successMessage!,
+                                              ),
+                                              backgroundColor: Colors.green,
+                                            ),
+                                          );
+                                        } else if (favoritesVm.error != null) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(favoritesVm.error!),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                icon: Icon(
+                                  isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                ),
                                 label: Text(
-                                  'Guardar',
+                                  isFavorite ? 'Guardado' : 'Guardar',
                                   style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w600,
                                   ),

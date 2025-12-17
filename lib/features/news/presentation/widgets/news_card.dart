@@ -1,6 +1,8 @@
 import 'package:appzoque/features/news/domain/entities/news_item.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:appzoque/features/favorites/presentation/viewmodels/favorites_viewmodel.dart';
 
 class NewsCard extends StatelessWidget {
   final NewsItem newsItem;
@@ -10,6 +12,9 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final favoritesVm = context.watch<FavoritesViewModel>();
+    final isFavorite = favoritesVm.isNewsFavorite(newsItem.id);
+
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 3,
@@ -105,6 +110,48 @@ class NewsCard extends StatelessWidget {
                             color: Colors.white,
                             size: 40,
                           ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Positioned(
+                    top: 12,
+                    right: 12,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.5),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        onPressed: favoritesVm.isLoading
+                            ? null
+                            : () async {
+                                await favoritesVm.toggleNewsFavorite(
+                                  newsItem.id,
+                                );
+                                if (!context.mounted) return;
+                                if (favoritesVm.successMessage != null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        favoritesVm.successMessage!,
+                                      ),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                } else if (favoritesVm.error != null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(favoritesVm.error!),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
+                              },
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          color: isFavorite ? Colors.red : Colors.white,
                         ),
                       ),
                     ),

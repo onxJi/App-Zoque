@@ -1,5 +1,6 @@
 import 'package:appzoque/features/auth/providers/auth_provider.dart';
 import 'package:appzoque/core/services/preferences_service.dart';
+import 'package:appzoque/features/favorites/presentation/screens/favorites_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -113,9 +114,9 @@ class AccountScreen extends StatelessWidget {
                 title: 'Favoritos',
                 subtitle: 'Noticias y palabras guardadas',
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Función próximamente disponible'),
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const FavoritesScreen(),
                     ),
                   );
                 },
