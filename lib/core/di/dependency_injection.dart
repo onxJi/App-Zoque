@@ -19,6 +19,7 @@ import 'package:appzoque/features/home/domain/repositories/home_repository.dart'
 import 'package:appzoque/features/home/domain/usecases/get_menu_items.dart';
 import 'package:appzoque/features/home/presentation/viewmodels/home_viewmodel.dart';
 import 'package:appzoque/features/teaching/data/datasources/teaching_mock_datasource.dart';
+import 'package:appzoque/features/teaching/data/datasources/teaching_in_memory_store.dart';
 import 'package:appzoque/features/teaching/data/repositories/teaching_repository_impl.dart';
 import 'package:appzoque/features/teaching/domain/repositories/teaching_repository.dart';
 import 'package:appzoque/features/teaching/domain/usecases/get_teaching_modules.dart';
@@ -34,6 +35,7 @@ import 'package:appzoque/features/admin/domain/usecases/delete_word.dart';
 import 'package:appzoque/features/admin/domain/usecases/add_module.dart';
 import 'package:appzoque/features/admin/domain/usecases/update_module.dart';
 import 'package:appzoque/features/admin/domain/usecases/delete_module.dart';
+import 'package:appzoque/features/admin/domain/usecases/save_lesson.dart';
 import 'package:appzoque/features/admin/domain/usecases/add_news.dart';
 import 'package:appzoque/features/admin/domain/usecases/update_news.dart';
 import 'package:appzoque/features/admin/domain/usecases/delete_news.dart';
@@ -138,7 +140,8 @@ class DependencyInjection {
 
     // Teaching setup
     // Data sources
-    final teachingMockDataSource = TeachingMockDataSource();
+    final teachingStore = TeachingInMemoryStore();
+    final teachingMockDataSource = TeachingMockDataSource(store: teachingStore);
 
     // Repository
     final TeachingRepository teachingRepository = TeachingRepositoryImpl(
@@ -157,7 +160,7 @@ class DependencyInjection {
 
     // Admin setup
     // Data sources
-    final adminMockDataSource = AdminMockDataSource();
+    final adminMockDataSource = AdminMockDataSource(teachingStore: teachingStore);
 
     // Repository
     final AdminRepository adminRepository = AdminRepositoryImpl(
@@ -172,6 +175,7 @@ class DependencyInjection {
     final addModule = AddModule(adminRepository);
     final updateModule = UpdateModule(adminRepository);
     final deleteModule = DeleteModule(adminRepository);
+    final saveLesson = SaveLesson(adminRepository);
     final addNews = AddNews(adminRepository);
     final updateNews = UpdateNews(adminRepository);
     final deleteNews = DeleteNews(adminRepository);
@@ -185,6 +189,7 @@ class DependencyInjection {
       addModuleUseCase: addModule,
       updateModuleUseCase: updateModule,
       deleteModuleUseCase: deleteModule,
+      saveLessonUseCase: saveLesson,
       addNewsUseCase: addNews,
       updateNewsUseCase: updateNews,
       deleteNewsUseCase: deleteNews,

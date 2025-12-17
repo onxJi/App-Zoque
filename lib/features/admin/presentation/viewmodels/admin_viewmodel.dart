@@ -10,9 +10,11 @@ import 'package:appzoque/features/admin/domain/usecases/delete_word.dart';
 import 'package:appzoque/features/admin/domain/usecases/add_module.dart';
 import 'package:appzoque/features/admin/domain/usecases/update_module.dart';
 import 'package:appzoque/features/admin/domain/usecases/delete_module.dart';
+import 'package:appzoque/features/admin/domain/usecases/save_lesson.dart';
 import 'package:appzoque/features/admin/domain/usecases/add_news.dart';
 import 'package:appzoque/features/admin/domain/usecases/update_news.dart';
 import 'package:appzoque/features/admin/domain/usecases/delete_news.dart';
+import 'package:appzoque/features/teaching/domain/entities/teaching_lesson.dart';
 
 class AdminViewModel extends ChangeNotifier {
   final GetAdminActions getAdminActionsUseCase;
@@ -22,6 +24,7 @@ class AdminViewModel extends ChangeNotifier {
   final AddModule addModuleUseCase;
   final UpdateModule updateModuleUseCase;
   final DeleteModule deleteModuleUseCase;
+  final SaveLesson saveLessonUseCase;
   final AddNews addNewsUseCase;
   final UpdateNews updateNewsUseCase;
   final DeleteNews deleteNewsUseCase;
@@ -39,6 +42,7 @@ class AdminViewModel extends ChangeNotifier {
     required this.addModuleUseCase,
     required this.updateModuleUseCase,
     required this.deleteModuleUseCase,
+    required this.saveLessonUseCase,
     required this.addNewsUseCase,
     required this.updateNewsUseCase,
     required this.deleteNewsUseCase,
@@ -53,6 +57,23 @@ class AdminViewModel extends ChangeNotifier {
     _error = null;
     _successMessage = null;
     notifyListeners();
+  }
+
+  Future<void> saveLesson(String moduleId, TeachingLesson lesson) async {
+    _isLoading = true;
+    _error = null;
+    _successMessage = null;
+    notifyListeners();
+
+    try {
+      await saveLessonUseCase(moduleId, lesson);
+      _successMessage = 'Lección guardada exitosamente';
+    } catch (e) {
+      _error = 'Error al guardar lección: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   // Load admin actions

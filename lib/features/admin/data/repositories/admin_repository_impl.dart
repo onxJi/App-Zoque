@@ -1,4 +1,5 @@
 import 'package:appzoque/features/dictionary/domain/entities/word.dart';
+import 'package:appzoque/features/teaching/domain/entities/teaching_lesson.dart';
 import 'package:appzoque/features/teaching/domain/entities/teaching_module.dart';
 import 'package:appzoque/features/admin/domain/repositories/admin_repository.dart';
 import 'package:appzoque/features/admin/data/datasources/admin_mock_datasource.dart';
@@ -43,6 +44,11 @@ class AdminRepositoryImpl implements AdminRepository {
   @override
   Future<void> deleteModule(String id) async {
     return await mockDataSource.deleteModule(id);
+  }
+
+  @override
+  Future<void> saveLesson(String moduleId, TeachingLesson lesson) async {
+    return await mockDataSource.saveLesson(moduleId, lesson);
   }
 
   @override

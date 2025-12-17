@@ -6,6 +6,7 @@ import 'package:appzoque/features/admin/presentation/viewmodels/admin_viewmodel.
 import 'package:appzoque/features/teaching/domain/entities/teaching_module.dart';
 import 'add_module_screen.dart';
 import 'edit_module_screen.dart';
+import 'manage_module_lessons_screen.dart';
 
 class ManageModulesScreen extends StatefulWidget {
   const ManageModulesScreen({super.key});
@@ -316,6 +317,25 @@ class _ManageModulesScreenState extends State<ManageModulesScreen> {
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                IconButton(
+                                  icon: const Icon(Icons.menu_book),
+                                  color: Theme.of(context).colorScheme.primary,
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ManageModuleLessonsScreen(
+                                          module: module,
+                                        ),
+                                      ),
+                                    ).then((_) {
+                                      context
+                                          .read<TeachingViewModel>()
+                                          .loadModules();
+                                    });
+                                  },
+                                ),
                                 IconButton(
                                   icon: const Icon(Icons.edit),
                                   color: Theme.of(context).colorScheme.primary,
