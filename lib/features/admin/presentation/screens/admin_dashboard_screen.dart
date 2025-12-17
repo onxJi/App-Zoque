@@ -5,7 +5,6 @@ import 'package:appzoque/features/admin/presentation/viewmodels/admin_viewmodel.
 import 'package:appzoque/features/admin/presentation/screens/manage_words_screen.dart';
 import 'package:appzoque/features/admin/presentation/screens/manage_modules_screen.dart';
 import 'package:appzoque/features/admin/presentation/screens/manage_news_screen.dart';
-import 'package:appzoque/features/admob/presentation/screens/admob_debug_screen.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});

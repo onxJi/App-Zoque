@@ -40,33 +40,49 @@ class _AppStartAdWrapperState extends State<AppStartAdWrapper> {
     try {
       final adMobProvider = context.read<AdMobProvider>();
 
-      // Cargar el anuncio
       print('📥 AppStartAdWrapper: Cargando anuncio...');
       await adMobProvider.loadInterstitialAd();
 
-      // Esperar para asegurar que se cargó
-      await Future.delayed(const Duration(seconds: 2));
+      // Esperar hasta que esté listo o timeout
+      bool ready = await _waitForAdReady(adMobProvider, timeoutSeconds: 10);
 
-      // Mostrar si está listo
-      if (adMobProvider.isInterstitialAdReady) {
+      if (ready && adMobProvider.isInterstitialAdReady) {
         print('✅ AppStartAdWrapper: Anuncio listo, mostrando...');
         await adMobProvider.showInterstitialAd();
         print('🎉 AppStartAdWrapper: Anuncio de inicio mostrado exitosamente');
       } else {
-        print('⚠️ AppStartAdWrapper: Anuncio no se cargó a tiempo');
+        print('⚠️ AppStartAdWrapper: Anuncio no se cargó a tiempo o falló');
         print('📊 Estado: ${adMobProvider.interstitialAd?.status}');
         if (adMobProvider.error != null) {
           print('❌ Error: ${adMobProvider.error}');
         }
       }
     } catch (e) {
-      print('❌ AppStartAdWrapper: Error: $e');
+      print('❌ AppStartAdWrapper: Error general: $e');
     } finally {
       if (mounted) {
-        print('🏁 AppStartAdWrapper: Mostrando contenido');
+        print('🏁 AppStartAdWrapper: Mostrando contenido principal');
         setState(() => _isLoading = false);
       }
     }
+  }
+
+  Future<bool> _waitForAdReady(
+    AdMobProvider provider, {
+    int timeoutSeconds = 10,
+  }) async {
+    int attempts = 0;
+    const maxAttempts = 20; // 20 intentos * 0.5s = 10s máx
+    const interval = Duration(milliseconds: 500);
+
+    while (attempts < maxAttempts) {
+      if (provider.isInterstitialAdReady) {
+        return true;
+      }
+      await Future.delayed(interval);
+      attempts++;
+    }
+    return false;
   }
 
   @override

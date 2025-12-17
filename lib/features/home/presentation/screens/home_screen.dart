@@ -1,3 +1,4 @@
+import 'package:appzoque/features/admob/presentation/providers/admob_provider.dart';
 import 'package:appzoque/features/home/presentation/viewmodels/home_viewmodel.dart';
 import 'package:appzoque/features/home/presentation/widgets/admin_tab.dart';
 import 'package:appzoque/features/home/presentation/widgets/custom_app_bar.dart';
@@ -17,13 +18,68 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool _adShownThisSession = false;
+  bool _showingAd = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadAndShowInitialAd();
       final authProvider = context.read<AuthProvider>();
       context.read<HomeViewModel>().loadMenuItems(authProvider.userEmail);
     });
+  }
+
+  Future<void> _loadAndShowInitialAd() async {
+    if (_adShownThisSession || _showingAd) return;
+
+    _adShownThisSession = true;
+    _showingAd = true;
+
+    try {
+      final adMobProvider = context.read<AdMobProvider>();
+
+      print('🎯 HomeScreen: Cargando anuncio de inicio...');
+      await adMobProvider.loadInterstitialAd();
+
+      bool ready = await _waitForAdReady(adMobProvider, timeoutSeconds: 10);
+
+      if (ready && mounted && adMobProvider.isInterstitialAdReady) {
+        print('✅ HomeScreen: Anuncio listo, mostrando...');
+        await adMobProvider.showInterstitialAd();
+        print('🎉 HomeScreen: Anuncio de inicio mostrado exitosamente');
+      } else {
+        print('⚠️ HomeScreen: Anuncio no se cargó a tiempo');
+        if (adMobProvider.error != null) {
+          print('❌ Error: ${adMobProvider.error}');
+        }
+      }
+    } catch (e) {
+      print('❌ HomeScreen: Error mostrando anuncio: $e');
+    } finally {
+      if (mounted) {
+        _showingAd = false;
+      }
+    }
+  }
+
+  Future<bool> _waitForAdReady(
+    AdMobProvider provider, {
+    int timeoutSeconds = 10,
+  }) async {
+    int attempts = 0;
+    const maxAttempts = 20;
+    const interval = Duration(milliseconds: 500);
+
+    while (attempts < maxAttempts && mounted) {
+      if (provider.isInterstitialAdReady) {
+        return true;
+      }
+      await Future.delayed(interval);
+      attempts++;
+    }
+    return false;
   }
 
   @override

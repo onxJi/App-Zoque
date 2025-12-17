@@ -10,6 +10,10 @@ class EnvConfig {
     return value.toLowerCase() == 'true';
   }
 
+  static String get googleClientId {
+    return dotenv.env['GOOGLE_CLIENT_ID'] ?? '';
+  }
+
   static Future<void> load() async {
     try {
       await dotenv.load(fileName: '.env');

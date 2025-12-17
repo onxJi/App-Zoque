@@ -4,7 +4,6 @@ import 'package:appzoque/features/auth/presentation/screens/auth_screen.dart';
 import 'package:appzoque/features/auth/presentation/screens/splash_screen.dart';
 import 'package:appzoque/features/home/presentation/screens/home_screen.dart';
 import 'package:appzoque/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:appzoque/features/admob/presentation/widgets/app_start_ad_wrapper.dart';
 import 'package:appzoque/core/services/preferences_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -22,11 +21,7 @@ GoRouter createRouter(AuthProvider authProvider) {
         builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(path: '/', builder: (context, state) => const AuthScreen()),
-      GoRoute(
-        path: '/home',
-        builder: (context, state) =>
-            const AppStartAdWrapper(child: HomeScreen()),
-      ),
+      GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
     ],
     redirect: (context, state) async {
       final location = state.uri.toString();
@@ -76,7 +71,7 @@ class _MyAppState extends State<MyApp> {
 
   void initialization() async {
     print('Initializing app...');
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 1));
     FlutterNativeSplash.remove();
   }
 

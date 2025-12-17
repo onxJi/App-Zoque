@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:appzoque/features/admob/data/datasources/admob_data_source.dart';
 import 'package:appzoque/features/admob/domain/entities/ad.dart';
 import 'package:appzoque/features/admob/domain/repositories/ad_repository.dart';
@@ -23,21 +25,30 @@ class AdRepositoryImpl implements AdRepository {
       status: AdStatus.loading,
     );
 
+    final completer = Completer<Ad>();
+
     await _dataSource.loadInterstitialAd(
       onAdLoaded: () {
         _currentInterstitialAd = _currentInterstitialAd?.copyWith(
           status: AdStatus.loaded,
         );
+        if (!completer.isCompleted && _currentInterstitialAd != null) {
+          completer.complete(_currentInterstitialAd!);
+        }
       },
       onAdFailedToLoad: (error) {
         _currentInterstitialAd = _currentInterstitialAd?.copyWith(
           status: AdStatus.failed,
         );
-        throw Exception('Failed to load interstitial ad: $error');
+        if (!completer.isCompleted) {
+          completer.completeError(
+            Exception('Failed to load interstitial ad: $error'),
+          );
+        }
       },
     );
 
-    return _currentInterstitialAd!;
+    return await completer.future;
   }
 
   @override
@@ -72,21 +83,30 @@ class AdRepositoryImpl implements AdRepository {
       status: AdStatus.loading,
     );
 
+    final completer = Completer<Ad>();
+
     await _dataSource.loadRewardedAd(
       onAdLoaded: () {
         _currentRewardedAd = _currentRewardedAd?.copyWith(
           status: AdStatus.loaded,
         );
+        if (!completer.isCompleted && _currentRewardedAd != null) {
+          completer.complete(_currentRewardedAd!);
+        }
       },
       onAdFailedToLoad: (error) {
         _currentRewardedAd = _currentRewardedAd?.copyWith(
           status: AdStatus.failed,
         );
-        throw Exception('Failed to load rewarded ad: $error');
+        if (!completer.isCompleted) {
+          completer.completeError(
+            Exception('Failed to load rewarded ad: $error'),
+          );
+        }
       },
     );
 
-    return _currentRewardedAd!;
+    return await completer.future;
   }
 
   @override

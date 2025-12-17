@@ -1,26 +1,43 @@
+import 'package:appzoque/core/config/env_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  final List<String> scopes = ['email', 'profile'];
   User? get currentUser => _auth.currentUser;
-
+  static bool isInitialize = false;
   Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  static Future<void> initSignIn() async {
+    if (!isInitialize) {
+      await _googleSignIn.initialize(serverClientId: EnvConfig.googleClientId);
+      isInitialize = true;
+    }
+  }
 
   Future<UserCredential?> signInWithGoogle() async {
     try {
+      initSignIn();
       // Iniciar sesión con Google
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) return null;
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+      final idToken = googleUser.authentication.idToken;
+      final authorizationClient = googleUser.authorizationClient;
+      GoogleSignInClientAuthorization? authorization = await authorizationClient
+          .authorizationForScopes(scopes);
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final accessToken = authorization?.accessToken;
 
+      if (accessToken == null) {
+        throw FirebaseAuthException(
+          code: 'internal-error',
+          message: 'No se pudo obtener el token de acceso',
+        );
+      }
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+        idToken: idToken,
+        accessToken: accessToken,
       );
 
       return await _auth.signInWithCredential(credential);

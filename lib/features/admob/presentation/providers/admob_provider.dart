@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:appzoque/features/admob/domain/entities/ad.dart';
 import 'package:appzoque/features/admob/domain/repositories/ad_repository.dart';
 import 'package:appzoque/features/admob/config/admob_config.dart';
@@ -6,7 +8,7 @@ import 'package:flutter/foundation.dart';
 /// Provider for managing AdMob state and operations
 class AdMobProvider extends ChangeNotifier {
   final AdRepository _repository;
-
+  Completer<void>? _interstitialLoadCompleter;
   Ad? _interstitialAd;
   Ad? _rewardedAd;
   bool _isInitialized = false;
@@ -60,20 +62,43 @@ class AdMobProvider extends ChangeNotifier {
     }
   }
 
-  /// Load an interstitial ad
   Future<void> loadInterstitialAd() async {
     try {
+      _interstitialLoadCompleter = Completer<void>();
+
       _log('📥 Cargando anuncio intersticial...');
-      _log('ID: ${AdMobConfig.interstitialAdUnitId}');
       _error = null;
+
+      // Tu lógica actual de carga
       _interstitialAd = await _repository.loadInterstitialAd();
+
+      // Importante: Completa el completer cuando esté listo
+      if (_interstitialAd?.status == AdStatus.loaded) {
+        if (!_interstitialLoadCompleter!.isCompleted) {
+          _interstitialLoadCompleter!.complete();
+        }
+      }
+
       _log('✅ Anuncio intersticial cargado');
       notifyListeners();
     } catch (e) {
       _error = e.toString();
       _interstitialAd = null;
+      _interstitialLoadCompleter?.completeError(e);
       _log('❌ Error al cargar anuncio: $e');
       notifyListeners();
+    }
+  }
+
+  // Método para esperar que el anuncio esté listo
+  Future<void> waitForInterstitialReady() async {
+    if (_interstitialLoadCompleter != null) {
+      await _interstitialLoadCompleter!.future.timeout(
+        const Duration(seconds: 10),
+        onTimeout: () => throw TimeoutException('Anuncio no se cargó a tiempo'),
+      );
+    } else {
+      throw Exception('No hay carga de anuncio en progreso');
     }
   }
 
