@@ -21,6 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _adShownThisSession = false;
   bool _showingAd = false;
 
+  PageController? _pageController;
+  int? _lastMenuItemsLength;
+
   @override
   void initState() {
     super.initState();
@@ -29,6 +32,12 @@ class _HomeScreenState extends State<HomeScreen> {
       final authProvider = context.read<AuthProvider>();
       context.read<HomeViewModel>().loadMenuItems(authProvider.userEmail);
     });
+  }
+
+  @override
+  void dispose() {
+    _pageController?.dispose();
+    super.dispose();
   }
 
   Future<void> _loadAndShowInitialAd() async {
@@ -98,10 +107,17 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
 
+        if (_pageController == null || _lastMenuItemsLength != viewModel.menuItems.length) {
+          _pageController?.dispose();
+          _pageController = PageController(initialPage: viewModel.selectedIndex);
+          _lastMenuItemsLength = viewModel.menuItems.length;
+        }
+
         return Scaffold(
           appBar: const CustomAppBar(title: 'App Zoque'),
-          body: IndexedStack(
-            index: viewModel.selectedIndex,
+          body: PageView(
+            controller: _pageController,
+            onPageChanged: (index) => viewModel.setIndex(index),
             children: viewModel.menuItems.map((item) {
               switch (item.id) {
                 case 'news':
@@ -119,7 +135,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           bottomNavigationBar: CustomBottomNav(
             currentIndex: viewModel.selectedIndex,
-            onTap: (index) => viewModel.setIndex(index),
+            onTap: (index) {
+              viewModel.setIndex(index);
+              _pageController?.animateToPage(
+                index,
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+              );
+            },
             menuItems: viewModel.menuItems,
           ),
         );
