@@ -2,13 +2,13 @@ flutter_native_splash:
   android: true
   ios: true
   web: false
-  image: "assets/img_logo1.png"
+  image: "assets/img_logo3.png"
   color: "#1E92A1"
 
   android_gravity: center
   ios_content_mode: center
 
-  image_dark: "assets/img_logo1.png"
+  image_dark: "assets/img_logo3.png"
   color_dark: "#1E92A1"
 
   fullscreen: true
@@ -16,6 +16,6 @@ flutter_native_splash:
   android_12:
     color: "#1E92A1"
     icon_background_color: "#1E92A1"
-    image: "assets/img_logo1.png"
+    image: "assets/img_logo3.png"
 
-    image_dark: "assets/img_logo1.png"
+    image_dark: "assets/img_logo3.png"
