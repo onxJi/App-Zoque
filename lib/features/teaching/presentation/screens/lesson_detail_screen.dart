@@ -707,34 +707,38 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
               size: 32,
             ),
             const SizedBox(width: 12),
-            Text(
-              '¡Lección Completada!',
-              style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+            Expanded(
+              child: Text(
+                '¡Lección Completada!',
+                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Tu puntuación',
-              style: GoogleFonts.inter(color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '$score%',
-              style: GoogleFonts.poppins(
-                fontSize: 48,
-                fontWeight: FontWeight.bold,
-                color: score >= 70 ? Colors.green : Colors.orange,
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Tu puntuación',
+                style: GoogleFonts.inter(color: Colors.grey[600]),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '$correctAnswers de $totalExercises respuestas correctas',
-              style: GoogleFonts.inter(color: Colors.grey[700]),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Text(
+                '$score%',
+                style: GoogleFonts.poppins(
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                  color: score >= 70 ? Colors.green : Colors.orange,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '$correctAnswers de $totalExercises respuestas correctas',
+                style: GoogleFonts.inter(color: Colors.grey[700]),
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(
