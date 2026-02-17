@@ -20,27 +20,27 @@ class AdminRepositoryImpl implements AdminRepository {
         title: 'Diccionario',
         subtitle: 'Palabras y frases',
         description: 'Gestionar palabras del diccionario',
-        icon: 'dictionary_icon.svg',
-        route: '/admin/dictionary',
-        color: '0xFF4CAF50', // green
+        icon: 'book',
+        route: '/admin/manage-dictionary',
+        color: 'green',
       ),
       AdminAction(
         id: 'news',
         title: 'Noticias',
         subtitle: 'Eventos y novedades',
         description: 'Gestionar noticias de la comunidad',
-        icon: 'news_icon.svg',
-        route: '/admin/news',
-        color: '0xFF2196F3', // blue
+        icon: 'article',
+        route: '/admin/manage-news',
+        color: 'blue',
       ),
       AdminAction(
         id: 'teaching',
         title: 'Enseñanza',
         subtitle: 'Módulos y lecciones',
         description: 'Gestionar módulos y lecciones',
-        icon: 'learning_icon.svg',
-        route: '/admin/teaching',
-        color: '0xFFFF9800', // orange
+        icon: 'school',
+        route: '/admin/manage-teaching',
+        color: 'orange',
       ),
     ];
   }

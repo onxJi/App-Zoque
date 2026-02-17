@@ -54,11 +54,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   Widget _getScreenForRoute(String route) {
     switch (route) {
-      case '/admin/add-word':
+      case '/admin/manage-dictionary':
         return const ManageWordsScreen();
-      case '/admin/add-module':
+      case '/admin/manage-teaching':
         return const ManageModulesScreen();
-      case '/admin/add-news':
+      case '/admin/manage-news':
         return const ManageNewsScreen();
       default:
         return const Scaffold(
@@ -126,6 +126,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                               crossAxisCount: 2,
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16,
+                              childAspectRatio: 0.85,
                             ),
                         itemCount: viewModel.adminActions.length,
                         itemBuilder: (context, index) {

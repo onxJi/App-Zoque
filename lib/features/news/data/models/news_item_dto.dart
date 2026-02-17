@@ -24,14 +24,15 @@ class NewsItemDTO {
   // Convert from JSON
   factory NewsItemDTO.fromJson(Map<String, dynamic> json) {
     return NewsItemDTO(
-      id: json['id'] as String,
-      titleSpanish: json['titleSpanish'] as String,
-      titleZoque: json['titleZoque'] as String,
-      description: json['description'] as String,
-      youtubeVideoId: json['youtubeVideoId'] as String,
-      thumbnailUrl: json['thumbnailUrl'] as String?,
-      publishedDate: json['publishedDate'] as String,
-      category: json['category'] as String,
+      id: json['id']?.toString() ?? '',
+      titleSpanish: json['titleSpanish']?.toString() ?? '',
+      titleZoque: json['titleZoque']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+      youtubeVideoId: json['youtubeVideoId']?.toString() ?? '',
+      thumbnailUrl: json['thumbnailUrl']?.toString(),
+      publishedDate:
+          json['publishedDate']?.toString() ?? DateTime.now().toIso8601String(),
+      category: json['category']?.toString() ?? 'General',
     );
   }
 

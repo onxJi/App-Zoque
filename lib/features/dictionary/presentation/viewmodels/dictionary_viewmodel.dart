@@ -70,7 +70,12 @@ class DictionaryViewModel extends ChangeNotifier {
     try {
       final nextPage = _currentPage + 1;
       final response = await getWords(page: nextPage, limit: _limit);
-      _words.addAll(response.data);
+
+      // Filter out words that are already in the list to avoid duplicates
+      final existingIds = _words.map((w) => w.id).toSet();
+      final newWords = response.data.where((w) => !existingIds.contains(w.id));
+
+      _words.addAll(newWords);
       _currentPage = nextPage;
       _totalPages = response.totalPages;
       _total = response.total;

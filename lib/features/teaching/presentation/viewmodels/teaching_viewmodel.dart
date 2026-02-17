@@ -67,7 +67,13 @@ class TeachingViewModel extends ChangeNotifier {
       if (refresh) {
         _modules = response.data;
       } else {
-        _modules.addAll(response.data);
+        // Filter out modules already in the list to avoid duplicates
+        final existingIds = _modules.map((m) => m.id).toSet();
+        final newModules = response.data.where(
+          (m) => !existingIds.contains(m.id),
+        );
+
+        _modules.addAll(newModules);
         _currentPage++;
       }
 

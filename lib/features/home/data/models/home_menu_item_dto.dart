@@ -21,14 +21,20 @@ class HomeMenuItemDTO {
 
   factory HomeMenuItemDTO.fromJson(Map<String, dynamic> json) {
     return HomeMenuItemDTO(
-      id: json['id'] as String,
-      label: json['label'] as String,
-      icon: json['icon'] as String,
-      activeIcon: json['activeIcon'] as String,
-      route: json['route'] as String,
-      requiredRoleId: json['requiredRoleId'] as int?,
-      order: json['order'] as int,
+      id: json['id']?.toString() ?? '',
+      label: json['label']?.toString() ?? '',
+      icon: json['icon']?.toString() ?? '',
+      activeIcon: json['activeIcon']?.toString() ?? '',
+      route: json['route']?.toString() ?? '',
+      requiredRoleId: _toInt(json['requiredRoleId']),
+      order: _toInt(json['order']) ?? 0,
     );
+  }
+
+  static int? _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value);
+    return null;
   }
 
   HomeMenuItem toEntity() {

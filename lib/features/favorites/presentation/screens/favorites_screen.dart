@@ -69,6 +69,10 @@ class _FavoritesScreenState extends State<FavoritesScreen>
         foregroundColor: Colors.white,
         bottom: TabBar(
           controller: _tabController,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white.withValues(alpha: 0.7),
+          indicatorColor: Colors.white,
+          indicatorWeight: 3,
           tabs: const [
             Tab(text: 'Noticias'),
             Tab(text: 'Diccionario'),
@@ -200,7 +204,9 @@ class _FavoritesNewsTab extends StatelessWidget {
         final item = items[index];
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: ListTile(
             onTap: () => onOpen(item),
             title: Text(
@@ -256,7 +262,9 @@ class _FavoritesWordsTab extends StatelessWidget {
         final word = items[index];
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: ListTile(
             onTap: () => onOpen(word),
             title: Text(

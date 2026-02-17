@@ -8,8 +8,8 @@ class WordExampleDTO {
 
   factory WordExampleDTO.fromJson(Map<String, dynamic> json) {
     return WordExampleDTO(
-      zoque: json['zoque'] as String,
-      spanish: json['spanish'] as String,
+      zoque: json['zoque']?.toString() ?? '',
+      spanish: json['spanish']?.toString() ?? '',
     );
   }
 
@@ -43,15 +43,17 @@ class WordDTO {
 
   factory WordDTO.fromJson(Map<String, dynamic> json) {
     return WordDTO(
-      id: json['id'] as String,
-      wordZoque: json['wordZoque'] as String,
-      wordSpanish: json['wordSpanish'] as String,
-      pronunciation: json['pronunciation'] as String,
-      category: json['category'] as String,
-      examples: (json['examples'] as List<dynamic>)
-          .map((e) => WordExampleDTO.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      audioUrl: json['audioUrl'] as String?,
+      id: json['id']?.toString() ?? '',
+      wordZoque: json['wordZoque']?.toString() ?? '',
+      wordSpanish: json['wordSpanish']?.toString() ?? '',
+      pronunciation: json['pronunciation']?.toString() ?? '',
+      category: json['category']?.toString() ?? '',
+      examples:
+          (json['examples'] as List<dynamic>?)
+              ?.map((e) => WordExampleDTO.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      audioUrl: json['audioUrl']?.toString(),
     );
   }
 

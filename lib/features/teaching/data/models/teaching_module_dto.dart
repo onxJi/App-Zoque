@@ -22,12 +22,12 @@ class TeachingModuleDTO {
 
   factory TeachingModuleDTO.fromJson(Map<String, dynamic> json) {
     return TeachingModuleDTO(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      titleZoque: json['titleZoque'] as String,
-      description: json['description'] as String,
-      imageUrl: json['imageUrl'] as String,
-      level: json['level'] as String,
+      id: json['id']?.toString() ?? '',
+      title: json['title']?.toString() ?? '',
+      titleZoque: json['titleZoque']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+      imageUrl: json['imageUrl']?.toString() ?? '',
+      level: json['level']?.toString() ?? '',
       lessons:
           (json['lessons'] as List<dynamic>?)
               ?.map(

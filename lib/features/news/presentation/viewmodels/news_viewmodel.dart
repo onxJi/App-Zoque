@@ -70,7 +70,13 @@ class NewsViewModel extends ChangeNotifier {
         _allNewsItems = response.data;
         _newsItems = List.from(_allNewsItems);
       } else {
-        _allNewsItems.addAll(response.data);
+        // Filter out items already in the list to avoid duplicates
+        final existingIds = _allNewsItems.map((n) => n.id).toSet();
+        final newItems = response.data.where(
+          (n) => !existingIds.contains(n.id),
+        );
+
+        _allNewsItems.addAll(newItems);
         _newsItems = List.from(_allNewsItems);
         _currentPage++;
       }

@@ -21,10 +21,16 @@ class PaginatedResponse<T> {
       data: (json['data'] as List<dynamic>)
           .map((item) => fromJsonT(item as Map<String, dynamic>))
           .toList(),
-      total: json['total'] as int,
-      page: json['page'] as int,
-      limit: json['limit'] as int,
-      totalPages: json['totalPages'] as int,
+      total: _toInt(json['total']) ?? 0,
+      page: _toInt(json['page']) ?? 1,
+      limit: _toInt(json['limit']) ?? 10,
+      totalPages: _toInt(json['totalPages'] ?? json['lastPage']) ?? 1,
     );
+  }
+
+  static int? _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value);
+    return null;
   }
 }

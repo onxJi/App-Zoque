@@ -23,11 +23,11 @@ class TeachingLessonDTO {
 
   factory TeachingLessonDTO.fromJson(Map<String, dynamic> json) {
     return TeachingLessonDTO(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      content: json['content'] as String,
-      duration: json['duration'] as String,
-      type: json['type'] as String? ?? 'vocabulary',
+      id: json['id']?.toString() ?? '',
+      title: json['title']?.toString() ?? '',
+      content: json['content']?.toString() ?? '',
+      duration: json['duration']?.toString() ?? '',
+      type: json['type']?.toString() ?? 'vocabulary',
       vocabulary:
           (json['vocabulary'] as List<dynamic>?)
               ?.map(
@@ -109,11 +109,11 @@ class VocabularyItemDTO {
 
   factory VocabularyItemDTO.fromJson(Map<String, dynamic> json) {
     return VocabularyItemDTO(
-      word: json['word'] as String? ?? json['zoque'] as String? ?? '',
+      word: json['word']?.toString() ?? json['zoque']?.toString() ?? '',
       translation:
-          json['translation'] as String? ?? json['spanish'] as String? ?? '',
-      pronunciation: json['pronunciation'] as String? ?? '',
-      audioUrl: json['audioUrl'] as String?,
+          json['translation']?.toString() ?? json['spanish']?.toString() ?? '',
+      pronunciation: json['pronunciation']?.toString() ?? '',
+      audioUrl: json['audioUrl']?.toString(),
     );
   }
 
@@ -158,9 +158,9 @@ class LessonExampleDTO {
 
   factory LessonExampleDTO.fromJson(Map<String, dynamic> json) {
     return LessonExampleDTO(
-      zoque: json['zoque'] as String,
-      spanish: json['spanish'] as String,
-      context: json['context'] as String?,
+      zoque: json['zoque']?.toString() ?? '',
+      spanish: json['spanish']?.toString() ?? '',
+      context: json['context']?.toString(),
     );
   }
 
@@ -204,16 +204,16 @@ class ExerciseDTO {
 
   factory ExerciseDTO.fromJson(Map<String, dynamic> json) {
     return ExerciseDTO(
-      id: json['id'] as String?,
-      type: json['type'] as String? ?? 'multiple_choice',
-      question: json['question'] as String,
+      id: json['id']?.toString(),
+      type: json['type']?.toString() ?? 'multiple_choice',
+      question: json['question']?.toString() ?? '',
       options:
           (json['options'] as List<dynamic>?)
-              ?.map((o) => o as String)
+              ?.map((o) => o?.toString() ?? '')
               .toList() ??
           [],
       correctAnswer: _parseCorrectAnswer(json['correctAnswer']),
-      explanation: json['explanation'] as String?,
+      explanation: json['explanation']?.toString(),
     );
   }
 
