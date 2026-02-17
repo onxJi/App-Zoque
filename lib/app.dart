@@ -70,7 +70,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   void initialization() async {
-    print('Initializing app...');
     await Future.delayed(const Duration(seconds: 1));
     FlutterNativeSplash.remove();
   }

@@ -676,7 +676,6 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
     // Mostrar anuncio intersticial al finalizar la lección
     try {
       final adMobProvider = context.read<AdMobProvider>();
-      print('🎯 Lección completada: Cargando anuncio...');
 
       // Cargar el anuncio
       await adMobProvider.loadInterstitialAd();
@@ -686,13 +685,9 @@ class _LessonDetailScreenState extends State<LessonDetailScreen> {
 
       // Mostrar si está listo
       if (adMobProvider.isInterstitialAdReady) {
-        print('📺 Mostrando anuncio de fin de lección...');
         await adMobProvider.showInterstitialAd();
-      } else {
-        print('⚠️ Anuncio no disponible, continuando...');
       }
     } catch (e) {
-      print('❌ Error al mostrar anuncio: $e');
       // Continuar aunque falle el anuncio
     }
 

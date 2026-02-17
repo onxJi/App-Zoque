@@ -175,14 +175,15 @@ class _ManageWordsScreenState extends State<ManageWordsScreen> {
                       ),
                       child: IconButton(
                         onPressed: () {
+                          final dictViewModel = context
+                              .read<DictionaryViewModel>();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const AddWordScreen(),
                             ),
                           ).then((_) {
-                            // Reload words after adding
-                            context.read<DictionaryViewModel>().loadWords();
+                            dictViewModel.loadWords();
                           });
                         },
                         icon: const Icon(Icons.add, color: Colors.white),
@@ -300,6 +301,8 @@ class _ManageWordsScreenState extends State<ManageWordsScreen> {
                                   icon: const Icon(Icons.edit),
                                   color: Theme.of(context).colorScheme.primary,
                                   onPressed: () {
+                                    final dictViewModel = context
+                                        .read<DictionaryViewModel>();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -307,10 +310,7 @@ class _ManageWordsScreenState extends State<ManageWordsScreen> {
                                             EditWordScreen(word: word),
                                       ),
                                     ).then((_) {
-                                      // Reload words after editing
-                                      context
-                                          .read<DictionaryViewModel>()
-                                          .loadWords();
+                                      dictViewModel.loadWords();
                                     });
                                   },
                                 ),

@@ -177,14 +177,15 @@ class _ManageModulesScreenState extends State<ManageModulesScreen> {
                       ),
                       child: IconButton(
                         onPressed: () {
+                          final teachingViewModel = context
+                              .read<TeachingViewModel>();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const AddModuleScreen(),
                             ),
                           ).then((_) {
-                            // Reload modules after adding
-                            context.read<TeachingViewModel>().loadModules();
+                            teachingViewModel.loadModules();
                           });
                         },
                         icon: const Icon(Icons.add, color: Colors.white),
@@ -321,18 +322,20 @@ class _ManageModulesScreenState extends State<ManageModulesScreen> {
                                   icon: const Icon(Icons.menu_book),
                                   color: Theme.of(context).colorScheme.primary,
                                   onPressed: () {
+                                    final teachingViewModel = context
+                                        .read<TeachingViewModel>();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             ManageModuleLessonsScreen(
-                                          module: module,
-                                        ),
+                                              module: module,
+                                            ),
                                       ),
                                     ).then((_) {
-                                      context
-                                          .read<TeachingViewModel>()
-                                          .loadModules();
+                                      if (mounted) {
+                                        teachingViewModel.loadModules();
+                                      }
                                     });
                                   },
                                 ),
@@ -340,6 +343,8 @@ class _ManageModulesScreenState extends State<ManageModulesScreen> {
                                   icon: const Icon(Icons.edit),
                                   color: Theme.of(context).colorScheme.primary,
                                   onPressed: () {
+                                    final teachingViewModel = context
+                                        .read<TeachingViewModel>();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -347,10 +352,7 @@ class _ManageModulesScreenState extends State<ManageModulesScreen> {
                                             EditModuleScreen(module: module),
                                       ),
                                     ).then((_) {
-                                      // Reload modules after editing
-                                      context
-                                          .read<TeachingViewModel>()
-                                          .loadModules();
+                                      teachingViewModel.loadModules();
                                     });
                                   },
                                 ),

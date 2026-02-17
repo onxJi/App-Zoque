@@ -14,7 +14,6 @@ class EnvConfig {
       await dotenv.load(fileName: '.env');
     } catch (e) {
       // If .env doesn't exist, use defaults
-      print('Warning: .env file not found, using default values');
     }
   }
 }

@@ -28,7 +28,9 @@ class _FavoritesScreenState extends State<FavoritesScreen>
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await context.read<FavoritesViewModel>().loadFavorites();
+      if (!mounted) return;
       await context.read<NewsViewModel>().loadNews();
+      if (!mounted) return;
       await context.read<DictionaryViewModel>().loadWords();
     });
   }

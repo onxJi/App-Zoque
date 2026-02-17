@@ -320,7 +320,7 @@ class _AddEditLessonScreenState extends State<AddEditLessonScreen> {
                   ),
                   const SizedBox(height: 16),
                   DropdownButtonFormField<String>(
-                    value: _type,
+                    initialValue: _type,
                     items: const [
                       DropdownMenuItem(
                         value: 'vocabulary',

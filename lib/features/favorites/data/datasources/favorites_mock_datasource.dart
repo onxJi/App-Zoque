@@ -15,19 +15,16 @@ class FavoritesMockDataSource {
 
   Future<List<String>> getFavoriteNewsIds() async {
     await _simulateDelay();
-    print('GET /api/favorites/news - Fetching favorite news ids');
     return store.favoriteNewsIds.toList();
   }
 
   Future<List<String>> getFavoriteWordIds() async {
     await _simulateDelay();
-    print('GET /api/favorites/words - Fetching favorite word ids');
     return store.favoriteWordIds.toList();
   }
 
   Future<void> addNewsFavorite(String newsId) async {
     await _simulateDelay();
-    print('POST /api/favorites/news - Adding favorite news: $newsId');
 
     final shouldFail = Random().nextDouble() < _toggleFailureRate;
     if (shouldFail) {
@@ -39,7 +36,6 @@ class FavoritesMockDataSource {
 
   Future<void> removeNewsFavorite(String newsId) async {
     await _simulateDelay();
-    print('DELETE /api/favorites/news/$newsId - Removing favorite news');
 
     final shouldFail = Random().nextDouble() < _toggleFailureRate;
     if (shouldFail) {
@@ -51,7 +47,6 @@ class FavoritesMockDataSource {
 
   Future<void> addWordFavorite(String wordId) async {
     await _simulateDelay();
-    print('POST /api/favorites/words - Adding favorite word: $wordId');
 
     final shouldFail = Random().nextDouble() < _toggleFailureRate;
     if (shouldFail) {
@@ -63,7 +58,6 @@ class FavoritesMockDataSource {
 
   Future<void> removeWordFavorite(String wordId) async {
     await _simulateDelay();
-    print('DELETE /api/favorites/words/$wordId - Removing favorite word');
 
     final shouldFail = Random().nextDouble() < _toggleFailureRate;
     if (shouldFail) {

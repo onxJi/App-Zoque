@@ -14,7 +14,6 @@ class AdminAuthRepositoryImpl implements AdminAuthRepository {
     try {
       return await dataSource.verifyAdminUser(idToken);
     } catch (e) {
-      print('Error en AdminAuthRepository: $e');
       rethrow;
     }
   }

@@ -52,23 +52,15 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final adMobProvider = context.read<AdMobProvider>();
 
-      print('🎯 HomeScreen: Cargando anuncio de inicio...');
       await adMobProvider.loadInterstitialAd();
 
       bool ready = await _waitForAdReady(adMobProvider, timeoutSeconds: 10);
 
       if (ready && mounted && adMobProvider.isInterstitialAdReady) {
-        print('✅ HomeScreen: Anuncio listo, mostrando...');
         await adMobProvider.showInterstitialAd();
-        print('🎉 HomeScreen: Anuncio de inicio mostrado exitosamente');
-      } else {
-        print('⚠️ HomeScreen: Anuncio no se cargó a tiempo');
-        if (adMobProvider.error != null) {
-          print('❌ Error: ${adMobProvider.error}');
-        }
       }
     } catch (e) {
-      print('❌ HomeScreen: Error mostrando anuncio: $e');
+      debugPrint('❌ HomeScreen: Error mostrando anuncio: $e');
     } finally {
       if (mounted) {
         _showingAd = false;

@@ -83,7 +83,6 @@ class AuthProvider extends ChangeNotifier {
   /// Envía el JWT de Google al backend para validación
   Future<void> checkIfUserIsAdmin() async {
     if (_verifyAdminUserUseCase == null) {
-      print('VerifyAdminUserUseCase no está disponible');
       return;
     }
 
@@ -96,7 +95,6 @@ class AuthProvider extends ChangeNotifier {
       final idToken = await _authService.getIdToken();
 
       if (idToken == null) {
-        print('No se pudo obtener el ID Token');
         _isCheckingAdmin = false;
         notifyListeners();
         return;
@@ -105,10 +103,7 @@ class AuthProvider extends ChangeNotifier {
       // Verificar con el backend si el usuario es admin
       final isAdmin = await _verifyAdminUserUseCase.call(idToken);
       _isAdmin = isAdmin;
-
-      print('Usuario es admin: $isAdmin');
     } catch (e) {
-      print('Error verificando si el usuario es admin: $e');
       _isAdmin = false;
     } finally {
       _isCheckingAdmin = false;

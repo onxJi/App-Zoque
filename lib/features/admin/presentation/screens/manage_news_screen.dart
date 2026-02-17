@@ -176,6 +176,7 @@ class _ManageNewsScreenState extends State<ManageNewsScreen> {
                       ),
                       child: IconButton(
                         onPressed: () {
+                          final newsViewModel = context.read<NewsViewModel>();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -183,7 +184,7 @@ class _ManageNewsScreenState extends State<ManageNewsScreen> {
                             ),
                           ).then((_) {
                             // Reload news after adding
-                            context.read<NewsViewModel>().loadNews();
+                            newsViewModel.loadNews();
                           });
                         },
                         icon: const Icon(Icons.add, color: Colors.white),
@@ -324,6 +325,8 @@ class _ManageNewsScreenState extends State<ManageNewsScreen> {
                                   icon: const Icon(Icons.edit),
                                   color: Theme.of(context).colorScheme.primary,
                                   onPressed: () {
+                                    final newsViewModel = context
+                                        .read<NewsViewModel>();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -332,7 +335,7 @@ class _ManageNewsScreenState extends State<ManageNewsScreen> {
                                       ),
                                     ).then((_) {
                                       // Reload news after editing
-                                      context.read<NewsViewModel>().loadNews();
+                                      newsViewModel.loadNews();
                                     });
                                   },
                                 ),

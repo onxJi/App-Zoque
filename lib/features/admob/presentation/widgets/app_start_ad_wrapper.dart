@@ -21,47 +21,30 @@ class _AppStartAdWrapperState extends State<AppStartAdWrapper> {
   @override
   void initState() {
     super.initState();
-    print(
-      '🔵 AppStartAdWrapper: initState - Ya mostrado: $_adShownThisSession',
-    );
-
     if (!_adShownThisSession) {
       _loadAndShowAd();
     } else {
-      print('⏭️ AppStartAdWrapper: Anuncio ya mostrado en esta sesión');
       setState(() => _isLoading = false);
     }
   }
 
   Future<void> _loadAndShowAd() async {
     _adShownThisSession = true;
-    print('🎯 AppStartAdWrapper: Cargando anuncio de inicio...');
 
     try {
       final adMobProvider = context.read<AdMobProvider>();
-
-      print('📥 AppStartAdWrapper: Cargando anuncio...');
       await adMobProvider.loadInterstitialAd();
 
       // Esperar hasta que esté listo o timeout
       bool ready = await _waitForAdReady(adMobProvider, timeoutSeconds: 10);
 
       if (ready && adMobProvider.isInterstitialAdReady) {
-        print('✅ AppStartAdWrapper: Anuncio listo, mostrando...');
         await adMobProvider.showInterstitialAd();
-        print('🎉 AppStartAdWrapper: Anuncio de inicio mostrado exitosamente');
-      } else {
-        print('⚠️ AppStartAdWrapper: Anuncio no se cargó a tiempo o falló');
-        print('📊 Estado: ${adMobProvider.interstitialAd?.status}');
-        if (adMobProvider.error != null) {
-          print('❌ Error: ${adMobProvider.error}');
-        }
       }
     } catch (e) {
-      print('❌ AppStartAdWrapper: Error general: $e');
+      debugPrint('❌ AppStartAdWrapper: Error general: $e');
     } finally {
       if (mounted) {
-        print('🏁 AppStartAdWrapper: Mostrando contenido principal');
         setState(() => _isLoading = false);
       }
     }
@@ -111,11 +94,5 @@ class _AppStartAdWrapperState extends State<AppStartAdWrapper> {
     }
 
     return widget.child;
-  }
-
-  /// Resetear el estado (útil al cerrar sesión)
-  static void reset() {
-    _adShownThisSession = false;
-    print('🔄 AppStartAdWrapper: Estado reseteado');
   }
 }

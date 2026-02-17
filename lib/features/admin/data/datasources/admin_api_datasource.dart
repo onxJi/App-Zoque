@@ -21,11 +21,6 @@ class AdminApiDataSource {
 
   Future<Map<String, String>> _getHeaders() async {
     final token = await authService.getIdToken();
-    if (token != null) {
-      debugPrint('AUTH: Usando token en headers: ${token}...');
-    } else {
-      debugPrint('AUTH: No hay token disponible para los headers');
-    }
     return {
       'Content-Type': 'application/json',
       if (token != null) 'Authorization': 'Bearer $token',

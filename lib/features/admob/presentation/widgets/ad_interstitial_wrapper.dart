@@ -11,9 +11,6 @@ class AppStartAdManager {
   /// Marca que se debe mostrar un anuncio en la próxima navegación al home
   static void markAppStart() {
     _shouldShowAdOnNextNavigation = true;
-    print(
-      '🔄 AppStartAdManager: Marcado para mostrar anuncio en próxima navegación',
-    );
   }
 
   /// Verifica si se debe mostrar el anuncio
@@ -23,9 +20,6 @@ class AppStartAdManager {
     if (_lastAdShownTime != null) {
       final timeSinceLastAd = DateTime.now().difference(_lastAdShownTime!);
       if (timeSinceLastAd.inSeconds < 5) {
-        print(
-          '⏭️ AppStartAdManager: Anuncio mostrado hace ${timeSinceLastAd.inSeconds}s, saltando',
-        );
         return false;
       }
     }
@@ -37,14 +31,12 @@ class AppStartAdManager {
   static void markAdShown() {
     _shouldShowAdOnNextNavigation = false;
     _lastAdShownTime = DateTime.now();
-    print('✅ AppStartAdManager: Anuncio marcado como mostrado');
   }
 
   /// Resetea el estado (para testing)
   static void reset() {
     _shouldShowAdOnNextNavigation = true;
     _lastAdShownTime = null;
-    print('🔄 AppStartAdManager: Estado reseteado');
   }
 }
 
@@ -71,33 +63,28 @@ class _AdInterstitialWrapperState extends State<AdInterstitialWrapper> {
   @override
   void initState() {
     super.initState();
-    print('🔵 AdInterstitialWrapper: initState');
 
     if (widget.showAdOnInit &&
         AppStartAdManager.shouldShowAd() &&
         !_adAttempted) {
       _loadAndShowAd();
     } else {
-      print('⏭️ AdInterstitialWrapper: No se debe mostrar anuncio ahora');
       setState(() => _isLoading = false);
     }
   }
 
   Future<void> _loadAndShowAd() async {
     if (_adAttempted) {
-      print('⚠️ AdInterstitialWrapper: Ya se intentó en esta instancia');
       setState(() => _isLoading = false);
       return;
     }
 
     _adAttempted = true;
-    print('🎯 AdInterstitialWrapper: Iniciando carga de anuncio de inicio...');
 
     try {
       final adMobProvider = context.read<AdMobProvider>();
 
       // Cargar el anuncio
-      print('📥 AdInterstitialWrapper: Cargando anuncio...');
       await adMobProvider.loadInterstitialAd();
 
       // Esperar un poco para asegurar que se cargó
@@ -105,33 +92,20 @@ class _AdInterstitialWrapperState extends State<AdInterstitialWrapper> {
 
       // Verificar si está listo
       if (adMobProvider.isInterstitialAdReady) {
-        print('✅ AdInterstitialWrapper: Anuncio listo, mostrando...');
-
         // Mostrar el anuncio
         await adMobProvider.showInterstitialAd();
 
         // Marcar que se mostró
         AppStartAdManager.markAdShown();
-
-        print(
-          '🎉 AdInterstitialWrapper: Anuncio de inicio mostrado exitosamente',
-        );
       } else {
-        print('⚠️ AdInterstitialWrapper: Anuncio no se cargó a tiempo');
-        print('📊 Estado del anuncio: ${adMobProvider.interstitialAd?.status}');
-        if (adMobProvider.error != null) {
-          print('❌ Error: ${adMobProvider.error}');
-        }
         // Si falla, permitir intentar de nuevo en el próximo inicio
         AppStartAdManager.markAppStart();
       }
     } catch (e) {
-      print('❌ AdInterstitialWrapper: Error al cargar/mostrar anuncio: $e');
       // Si hay error, permitir intentar de nuevo en el próximo inicio
       AppStartAdManager.markAppStart();
     } finally {
       if (mounted) {
-        print('🏁 AdInterstitialWrapper: Finalizando, mostrando contenido');
         setState(() => _isLoading = false);
       }
     }

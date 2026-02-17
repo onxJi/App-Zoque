@@ -31,7 +31,7 @@ class AuthService {
       await initSignIn();
       final account = await _googleSignIn.attemptLightweightAuthentication();
       if (account != null) {
-        final auth = await account.authentication;
+        final auth = account.authentication;
         _currentAuthUser = AuthUser(
           email: account.email,
           displayName: account.displayName,
@@ -51,12 +51,9 @@ class AuthService {
   Future<AuthUser?> signInWithGoogle() async {
     try {
       await initSignIn();
-      final GoogleSignInAccount? googleUser = await _googleSignIn
-          .authenticate();
-      if (googleUser == null) return null;
+      final googleUser = await _googleSignIn.authenticate();
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
       _currentAuthUser = AuthUser(
         email: googleUser.email,
@@ -95,7 +92,7 @@ class AuthService {
         return null;
       }
 
-      final auth = await account.authentication;
+      final auth = account.authentication;
       final idToken = auth.idToken;
 
       if (idToken != null) {
