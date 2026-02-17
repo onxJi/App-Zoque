@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../../../../core/config/env_config.dart';
+import '../../../../core/models/paginated_response.dart';
 import '../../domain/entities/word.dart';
 import '../models/word_dto.dart';
 
@@ -10,22 +12,28 @@ class DictionaryApiDataSource {
   DictionaryApiDataSource({http.Client? client})
     : client = client ?? http.Client();
 
-  Future<List<Word>> getWords() async {
-    final url = Uri.parse('${EnvConfig.apiBaseUrl}/dictionary/words');
+  Future<PaginatedResponse<Word>> getWords({
+    int page = 1,
+    int limit = 10,
+  }) async {
+    final url = Uri.parse(
+      '${EnvConfig.apiBaseUrl}/dictionary?page=$page&limit=$limit',
+    );
 
     try {
+      debugPrint('API CALL: GET $url');
       final response = await client.get(
         url,
         headers: {'Content-Type': 'application/json'},
       );
+      debugPrint('API RESPONSE: ${response.statusCode} from $url');
 
       if (response.statusCode == 200) {
-        final List<dynamic> jsonList =
-            json.decode(response.body) as List<dynamic>;
-        return jsonList
-            .map((json) => WordDTO.fromJson(json as Map<String, dynamic>))
-            .map((dto) => dto.toEntity())
-            .toList();
+        final jsonResponse = json.decode(response.body) as Map<String, dynamic>;
+        return PaginatedResponse.fromJson(
+          jsonResponse,
+          (json) => WordDTO.fromJson(json).toEntity(),
+        );
       } else {
         throw Exception('Failed to load words: ${response.statusCode}');
       }
@@ -34,22 +42,29 @@ class DictionaryApiDataSource {
     }
   }
 
-  Future<List<Word>> searchWords(String query) async {
-    final url = Uri.parse('${EnvConfig.apiBaseUrl}/dictionary/search?q=$query');
+  Future<PaginatedResponse<Word>> searchWords(
+    String query, {
+    int page = 1,
+    int limit = 10,
+  }) async {
+    final url = Uri.parse(
+      '${EnvConfig.apiBaseUrl}/dictionary?search=$query&page=$page&limit=$limit',
+    );
 
     try {
+      debugPrint('API CALL: GET $url');
       final response = await client.get(
         url,
         headers: {'Content-Type': 'application/json'},
       );
+      debugPrint('API RESPONSE: ${response.statusCode} from $url');
 
       if (response.statusCode == 200) {
-        final List<dynamic> jsonList =
-            json.decode(response.body) as List<dynamic>;
-        return jsonList
-            .map((json) => WordDTO.fromJson(json as Map<String, dynamic>))
-            .map((dto) => dto.toEntity())
-            .toList();
+        final jsonResponse = json.decode(response.body) as Map<String, dynamic>;
+        return PaginatedResponse.fromJson(
+          jsonResponse,
+          (json) => WordDTO.fromJson(json).toEntity(),
+        );
       } else {
         throw Exception('Failed to search words: ${response.statusCode}');
       }
@@ -59,13 +74,15 @@ class DictionaryApiDataSource {
   }
 
   Future<Word?> getWordById(String id) async {
-    final url = Uri.parse('${EnvConfig.apiBaseUrl}/dictionary/words/$id');
+    final url = Uri.parse('${EnvConfig.apiBaseUrl}/dictionary/$id');
 
     try {
+      debugPrint('API CALL: GET $url');
       final response = await client.get(
         url,
         headers: {'Content-Type': 'application/json'},
       );
+      debugPrint('API RESPONSE: ${response.statusCode} from $url');
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body) as Map<String, dynamic>;
@@ -80,31 +97,14 @@ class DictionaryApiDataSource {
     }
   }
 
+  // Note: The API doesn't have a specific endpoint for category filtering
+  // This would need to be done client-side or the backend needs to add this endpoint
   Future<List<Word>> getWordsByCategory(String category) async {
-    final url = Uri.parse(
-      '${EnvConfig.apiBaseUrl}/dictionary/words/category/$category',
-    );
-
-    try {
-      final response = await client.get(
-        url,
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonList =
-            json.decode(response.body) as List<dynamic>;
-        return jsonList
-            .map((json) => WordDTO.fromJson(json as Map<String, dynamic>))
-            .map((dto) => dto.toEntity())
-            .toList();
-      } else {
-        throw Exception(
-          'Failed to load words by category: ${response.statusCode}',
-        );
-      }
-    } catch (e) {
-      throw Exception('Error fetching words by category from API: $e');
-    }
+    // For now, we'll fetch all words and filter client-side
+    // This is not optimal for large datasets
+    final response = await getWords(limit: 1000); // Get a large batch
+    return response.data
+        .where((word) => word.category.toLowerCase() == category.toLowerCase())
+        .toList();
   }
 }

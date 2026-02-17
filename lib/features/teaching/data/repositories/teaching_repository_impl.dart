@@ -1,33 +1,28 @@
-import 'package:appzoque/features/teaching/data/datasources/teaching_mock_datasource.dart';
+import 'package:appzoque/core/models/paginated_response.dart';
+import 'package:appzoque/features/teaching/data/datasources/teaching_api_datasource.dart';
 import 'package:appzoque/features/teaching/domain/entities/teaching_module.dart';
 import 'package:appzoque/features/teaching/domain/repositories/teaching_repository.dart';
-import 'package:appzoque/core/config/env_config.dart';
 
 class TeachingRepositoryImpl implements TeachingRepository {
-  final TeachingMockDataSource mockDataSource;
-  // Add apiDataSource when ready
+  final TeachingApiDataSource apiDataSource;
 
-  TeachingRepositoryImpl({required this.mockDataSource});
-
-  bool get _useMockData => EnvConfig.useMockData;
+  TeachingRepositoryImpl({required this.apiDataSource});
 
   @override
-  Future<List<TeachingModule>> getModules() async {
-    if (_useMockData) {
-      return await mockDataSource.getModules();
-    } else {
-      // Fallback or implement API call
-      return await mockDataSource.getModules();
-    }
+  Future<PaginatedResponse<TeachingModule>> getModules({
+    int page = 1,
+    int limit = 10,
+    String? search,
+  }) async {
+    return await apiDataSource.getModules(
+      page: page,
+      limit: limit,
+      search: search,
+    );
   }
 
   @override
   Future<TeachingModule?> getModuleById(String id) async {
-    if (_useMockData) {
-      return await mockDataSource.getModuleById(id);
-    } else {
-      // Fallback or implement API call
-      return await mockDataSource.getModuleById(id);
-    }
+    return await apiDataSource.getModuleById(id);
   }
 }

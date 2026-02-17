@@ -1,3 +1,4 @@
+import '../../../../core/models/paginated_response.dart';
 import '../entities/word.dart';
 import '../repositories/dictionary_repository.dart';
 
@@ -6,7 +7,7 @@ class GetWords {
 
   GetWords(this.repository);
 
-  Future<List<Word>> call() async {
-    return await repository.getWords();
+  Future<PaginatedResponse<Word>> call({int page = 1, int limit = 10}) async {
+    return await repository.getWords(page: page, limit: limit);
   }
 }

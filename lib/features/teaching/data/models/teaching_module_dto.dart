@@ -38,6 +38,18 @@ class TeachingModuleDTO {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'titleZoque': titleZoque,
+      'description': description,
+      'imageUrl': imageUrl,
+      'level': level,
+      'lessons': lessons.map((dto) => dto.toJson()).toList(),
+    };
+  }
+
   TeachingModule toEntity() {
     return TeachingModule(
       id: id,
@@ -47,6 +59,20 @@ class TeachingModuleDTO {
       imageUrl: imageUrl,
       level: level,
       lessons: lessons.map((dto) => dto.toEntity()).toList(),
+    );
+  }
+
+  factory TeachingModuleDTO.fromEntity(TeachingModule entity) {
+    return TeachingModuleDTO(
+      id: entity.id,
+      title: entity.title,
+      titleZoque: entity.titleZoque,
+      description: entity.description,
+      imageUrl: entity.imageUrl,
+      level: entity.level,
+      lessons: entity.lessons
+          .map((l) => TeachingLessonDTO.fromEntity(l))
+          .toList(),
     );
   }
 }

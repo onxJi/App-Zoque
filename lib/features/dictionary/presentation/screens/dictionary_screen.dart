@@ -13,6 +13,8 @@ class DictionaryScreen extends StatefulWidget {
 }
 
 class _DictionaryScreenState extends State<DictionaryScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -20,6 +22,21 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<DictionaryViewModel>().loadWords();
     });
+
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<DictionaryViewModel>().loadMoreWords();
+    }
   }
 
   @override
@@ -129,10 +146,20 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                 return RefreshIndicator(
                   onRefresh: () => viewModel.loadWords(),
                   child: ListView.builder(
+                    controller: _scrollController,
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    itemCount: viewModel.words.length,
+                    itemCount:
+                        viewModel.words.length +
+                        (viewModel.isLoadingMore ? 1 : 0),
                     itemBuilder: (context, index) {
-                      return WordCard(word: viewModel.words[index]);
+                      if (index < viewModel.words.length) {
+                        return WordCard(word: viewModel.words[index]);
+                      } else {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 32.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
                     },
                   ),
                 );

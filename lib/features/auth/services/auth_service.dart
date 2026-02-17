@@ -1,14 +1,19 @@
+import 'dart:async';
 import 'package:appzoque/core/config/env_config.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:appzoque/features/auth/domain/entities/auth_user.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  final List<String> scopes = ['email', 'profile'];
-  User? get currentUser => _auth.currentUser;
+
+  AuthUser? _currentAuthUser;
+  AuthUser? get currentUser => _currentAuthUser;
+
   static bool isInitialize = false;
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+
+  final _userStreamController = StreamController<AuthUser?>.broadcast();
+  Stream<AuthUser?> get authStateChanges => _userStreamController.stream;
 
   static Future<void> initSignIn() async {
     if (!isInitialize) {
@@ -17,54 +22,99 @@ class AuthService {
     }
   }
 
-  Future<UserCredential?> signInWithGoogle() async {
+  AuthService() {
+    _initUser();
+  }
+
+  Future<void> _initUser() async {
     try {
-      initSignIn();
-      // Iniciar sesión con Google
-      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-      final idToken = googleUser.authentication.idToken;
-      final authorizationClient = googleUser.authorizationClient;
-      GoogleSignInClientAuthorization? authorization = await authorizationClient
-          .authorizationForScopes(scopes);
-
-      final accessToken = authorization?.accessToken;
-
-      if (accessToken == null) {
-        throw FirebaseAuthException(
-          code: 'internal-error',
-          message: 'No se pudo obtener el token de acceso',
+      await initSignIn();
+      final account = await _googleSignIn.attemptLightweightAuthentication();
+      if (account != null) {
+        final auth = await account.authentication;
+        _currentAuthUser = AuthUser(
+          email: account.email,
+          displayName: account.displayName,
+          photoURL: account.photoUrl,
+          idToken: auth.idToken,
         );
+      } else {
+        _currentAuthUser = null;
       }
-      final credential = GoogleAuthProvider.credential(
-        idToken: idToken,
-        accessToken: accessToken,
+      _userStreamController.add(_currentAuthUser);
+    } catch (e) {
+      debugPrint('Error en _initUser: $e');
+      _userStreamController.add(null);
+    }
+  }
+
+  Future<AuthUser?> signInWithGoogle() async {
+    try {
+      await initSignIn();
+      final GoogleSignInAccount? googleUser = await _googleSignIn
+          .authenticate();
+      if (googleUser == null) return null;
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      _currentAuthUser = AuthUser(
+        email: googleUser.email,
+        displayName: googleUser.displayName,
+        photoURL: googleUser.photoUrl,
+        idToken: googleAuth.idToken,
       );
 
-      return await _auth.signInWithCredential(credential);
+      _userStreamController.add(_currentAuthUser);
+      return _currentAuthUser;
     } catch (e) {
-      // ignore: avoid_print
-      print('Error en signInWithGoogle: $e');
+      debugPrint('Error en signInWithGoogle: $e');
       return null;
     }
   }
 
   Future<void> signOut() async {
-    await _googleSignIn.signOut();
-    await _auth.signOut();
+    try {
+      await _googleSignIn.signOut();
+      _currentAuthUser = null;
+      _userStreamController.add(null);
+    } catch (e) {
+      debugPrint('Error en signOut: $e');
+    }
   }
 
   /// Obtiene el ID Token del usuario actual para autenticación con el backend
-  /// Este token JWT de Google se usa para verificar si el usuario es admin
   Future<String?> getIdToken() async {
     try {
-      final user = _auth.currentUser;
-      if (user == null) return null;
+      await initSignIn();
 
-      // Force refresh para asegurar que el token esté actualizado
-      final idToken = await user.getIdToken(true);
+      // Intentar obtener el token del usuario actual o re-autenticar silenciosamente
+      final account = await _googleSignIn.attemptLightweightAuthentication();
+      if (account == null) {
+        debugPrint('AUTH: No hay usuario autenticado (lightweight)');
+        return null;
+      }
+
+      final auth = await account.authentication;
+      final idToken = auth.idToken;
+
+      if (idToken != null) {
+        if (idToken.startsWith('eyJ')) {
+          debugPrint(
+            'AUTH: Token JWT obtenido correctamente (empieza con eyJ)',
+          );
+        } else {
+          debugPrint(
+            'AUTH: ADVERTENCIA - El token obtenido no parece un JWT válido: ${idToken.substring(0, 10)}...',
+          );
+        }
+      } else {
+        debugPrint('AUTH: Error - El token obtenido es NULL');
+      }
+
       return idToken;
     } catch (e) {
-      print('Error obteniendo ID Token: $e');
+      debugPrint('AUTH: Error obteniendo ID Token: $e');
       return null;
     }
   }

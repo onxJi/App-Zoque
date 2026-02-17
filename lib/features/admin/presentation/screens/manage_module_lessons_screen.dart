@@ -71,27 +71,23 @@ class _ManageModuleLessonsScreenState extends State<ManageModuleLessonsScreen> {
 
     if (confirmed != true || !mounted) return;
 
-    final updatedLessons = List<TeachingLesson>.from(_module.lessons)
-      ..removeWhere((l) => l.id == lesson.id);
-
-    final updatedModule = TeachingModule(
-      id: _module.id,
-      title: _module.title,
-      titleZoque: _module.titleZoque,
-      description: _module.description,
-      imageUrl: _module.imageUrl,
-      level: _module.level,
-      lessons: updatedLessons,
-    );
-
-    await context.read<AdminViewModel>().updateModule(_module.id, updatedModule);
+    await context.read<AdminViewModel>().deleteLesson(lesson.id);
 
     if (!mounted) return;
 
     final viewModel = context.read<AdminViewModel>();
     if (viewModel.successMessage != null) {
       setState(() {
-        _module = updatedModule;
+        _module = TeachingModule(
+          id: _module.id,
+          title: _module.title,
+          titleZoque: _module.titleZoque,
+          description: _module.description,
+          imageUrl: _module.imageUrl,
+          level: _module.level,
+          lessons: List<TeachingLesson>.from(_module.lessons)
+            ..removeWhere((l) => l.id == lesson.id),
+        );
       });
       await _refreshModules();
       if (!mounted) return;
@@ -103,10 +99,7 @@ class _ManageModuleLessonsScreenState extends State<ManageModuleLessonsScreen> {
       );
     } else if (viewModel.error != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(viewModel.error!),
-          backgroundColor: Colors.red,
-        ),
+        SnackBar(content: Text(viewModel.error!), backgroundColor: Colors.red),
       );
     }
   }
@@ -205,20 +198,21 @@ class _ManageModuleLessonsScreenState extends State<ManageModuleLessonsScreen> {
                                   children: [
                                     IconButton(
                                       icon: const Icon(Icons.edit),
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
                                       onPressed: () async {
                                         final result =
                                             await Navigator.push<bool>(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                AddEditLessonScreen(
-                                              module: _module,
-                                              initialLesson: lesson,
-                                            ),
-                                          ),
-                                        );
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddEditLessonScreen(
+                                                      module: _module,
+                                                      initialLesson: lesson,
+                                                    ),
+                                              ),
+                                            );
 
                                         if (result == true && mounted) {
                                           await _refreshModules();

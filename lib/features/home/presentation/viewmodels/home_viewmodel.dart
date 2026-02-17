@@ -21,12 +21,12 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadMenuItems(String? userEmail) async {
+  Future<void> loadMenuItems(String? token) async {
     _isLoading = true;
     notifyListeners();
 
     try {
-      _menuItems = await getMenuItemsUseCase(userEmail);
+      _menuItems = await getMenuItemsUseCase(token);
     } catch (e) {
       debugPrint('Error loading menu items: $e');
       // Handle error appropriately, maybe set empty list or default items

@@ -27,10 +27,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       _loadAndShowInitialAd();
       final authProvider = context.read<AuthProvider>();
-      context.read<HomeViewModel>().loadMenuItems(authProvider.userEmail);
+      final token = await authProvider.getIdToken();
+      if (mounted) {
+        context.read<HomeViewModel>().loadMenuItems(token);
+      }
     });
   }
 
@@ -107,9 +110,12 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
 
-        if (_pageController == null || _lastMenuItemsLength != viewModel.menuItems.length) {
+        if (_pageController == null ||
+            _lastMenuItemsLength != viewModel.menuItems.length) {
           _pageController?.dispose();
-          _pageController = PageController(initialPage: viewModel.selectedIndex);
+          _pageController = PageController(
+            initialPage: viewModel.selectedIndex,
+          );
           _lastMenuItemsLength = viewModel.menuItems.length;
         }
 

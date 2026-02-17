@@ -18,11 +18,13 @@ class NewsViewModel extends ChangeNotifier {
   List<NewsItem> _newsItems = [];
   List<NewsItem> get newsItems => _newsItems;
 
-  // Store all items to support local filtering/search
   List<NewsItem> _allNewsItems = [];
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+
+  bool _isLoadingMore = false;
+  bool get isLoadingMore => _isLoadingMore;
 
   String? _error;
   String? get error => _error;
@@ -30,41 +32,80 @@ class NewsViewModel extends ChangeNotifier {
   String? _selectedCategory;
   String? get selectedCategory => _selectedCategory;
 
+  // Pagination state
+  int _currentPage = 1;
+  int _totalPages = 1;
+  int _totalCount = 0;
+  final int _limit = 10;
+
+  bool get hasMorePages => _currentPage < _totalPages;
+  int get currentPage => _currentPage;
+  int get totalPages => _totalPages;
+  int get totalCount => _totalCount;
+
   List<String> get categories {
     final categorySet = _allNewsItems.map((item) => item.category).toSet();
     return categorySet.toList()..sort();
   }
 
-  Future<void> loadNews() async {
-    _isLoading = true;
+  Future<void> loadNews({bool refresh = true}) async {
+    if (refresh) {
+      _currentPage = 1;
+      _isLoading = true;
+    } else {
+      if (!hasMorePages || _isLoadingMore) return;
+      _isLoadingMore = true;
+    }
+
     _error = null;
     notifyListeners();
 
     try {
-      _allNewsItems = await getNewsUseCase();
-      _newsItems = List.from(_allNewsItems);
+      final response = await getNewsUseCase(
+        page: refresh ? 1 : _currentPage + 1,
+        limit: _limit,
+      );
+
+      if (refresh) {
+        _allNewsItems = response.data;
+        _newsItems = List.from(_allNewsItems);
+      } else {
+        _allNewsItems.addAll(response.data);
+        _newsItems = List.from(_allNewsItems);
+        _currentPage++;
+      }
+
+      _totalCount = response.total;
+      _totalPages = response.totalPages;
+
       _isLoading = false;
+      _isLoadingMore = false;
       notifyListeners();
     } catch (e) {
       _error = e.toString();
       _isLoading = false;
+      _isLoadingMore = false;
       notifyListeners();
     }
   }
 
   Future<void> filterByCategory(String? category) async {
     _selectedCategory = category;
+    _currentPage = 1;
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      if (category == null || category.isEmpty) {
-        _allNewsItems = await getNewsUseCase();
-      } else {
-        _allNewsItems = await getNewsByCategoryUseCase(category);
-      }
+      final response = (category == null || category.isEmpty)
+          ? await getNewsUseCase(page: 1, limit: _limit)
+          : await getNewsByCategoryUseCase(category, page: 1, limit: _limit);
+
+      _allNewsItems = response.data;
       _newsItems = List.from(_allNewsItems);
+      _totalCount = response.total;
+      _totalPages = response.totalPages;
+
       _isLoading = false;
       notifyListeners();
     } catch (e) {

@@ -13,25 +13,41 @@ class DictionaryViewModel extends ChangeNotifier {
   List<Word> _words = [];
   List<Word> _filteredWords = [];
   bool _isLoading = false;
+  bool _isLoadingMore = false;
   String? _error;
   String _searchQuery = '';
+
+  // Pagination state
+  int _currentPage = 1;
+  int _totalPages = 1;
+  int _total = 0;
+  final int _limit = 20;
 
   // Getters
   List<Word> get words =>
       _filteredWords.isEmpty && _searchQuery.isEmpty ? _words : _filteredWords;
   bool get isLoading => _isLoading;
+  bool get isLoadingMore => _isLoadingMore;
   String? get error => _error;
   bool get hasWords => words.isNotEmpty;
   String get searchQuery => _searchQuery;
+  bool get hasMorePages => _currentPage < _totalPages;
+  int get total => _total;
+  int get currentPage => _currentPage;
+  int get totalPages => _totalPages;
 
-  // Load all words
+  // Load all words (first page)
   Future<void> loadWords() async {
     _isLoading = true;
     _error = null;
+    _currentPage = 1;
     notifyListeners();
 
     try {
-      _words = await getWords();
+      final response = await getWords(page: _currentPage, limit: _limit);
+      _words = response.data;
+      _total = response.total;
+      _totalPages = response.totalPages;
       _filteredWords = [];
       _searchQuery = '';
       _error = null;
@@ -40,6 +56,29 @@ class DictionaryViewModel extends ChangeNotifier {
       _words = [];
     } finally {
       _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Load more words (next page)
+  Future<void> loadMoreWords() async {
+    if (_isLoadingMore || !hasMorePages || _searchQuery.isNotEmpty) return;
+
+    _isLoadingMore = true;
+    notifyListeners();
+
+    try {
+      final nextPage = _currentPage + 1;
+      final response = await getWords(page: nextPage, limit: _limit);
+      _words.addAll(response.data);
+      _currentPage = nextPage;
+      _totalPages = response.totalPages;
+      _total = response.total;
+      _error = null;
+    } catch (e) {
+      _error = 'Error al cargar más palabras: $e';
+    } finally {
+      _isLoadingMore = false;
       notifyListeners();
     }
   }
@@ -59,7 +98,8 @@ class DictionaryViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      _filteredWords = await searchWords(query);
+      final response = await searchWords(query, page: 1, limit: 100);
+      _filteredWords = response.data;
       _error = null;
     } catch (e) {
       _error = 'Error al buscar palabras: $e';

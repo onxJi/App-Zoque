@@ -17,7 +17,9 @@ abstract class AdminRepository {
   Future<void> addModule(TeachingModule module);
   Future<void> updateModule(String id, TeachingModule module);
   Future<void> deleteModule(String id);
-  Future<void> saveLesson(String moduleId, TeachingLesson lesson);
+  Future<void> addLesson(String moduleId, TeachingLesson lesson);
+  Future<void> updateLesson(String id, TeachingLesson lesson);
+  Future<void> deleteLesson(String id);
 
   // News operations
   Future<void> addNews(NewsItem newsItem);

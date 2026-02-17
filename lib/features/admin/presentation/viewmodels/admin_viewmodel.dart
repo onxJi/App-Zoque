@@ -10,7 +10,9 @@ import 'package:appzoque/features/admin/domain/usecases/delete_word.dart';
 import 'package:appzoque/features/admin/domain/usecases/add_module.dart';
 import 'package:appzoque/features/admin/domain/usecases/update_module.dart';
 import 'package:appzoque/features/admin/domain/usecases/delete_module.dart';
-import 'package:appzoque/features/admin/domain/usecases/save_lesson.dart';
+import 'package:appzoque/features/admin/domain/usecases/add_lesson.dart';
+import 'package:appzoque/features/admin/domain/usecases/update_lesson.dart';
+import 'package:appzoque/features/admin/domain/usecases/delete_lesson.dart';
 import 'package:appzoque/features/admin/domain/usecases/add_news.dart';
 import 'package:appzoque/features/admin/domain/usecases/update_news.dart';
 import 'package:appzoque/features/admin/domain/usecases/delete_news.dart';
@@ -24,7 +26,9 @@ class AdminViewModel extends ChangeNotifier {
   final AddModule addModuleUseCase;
   final UpdateModule updateModuleUseCase;
   final DeleteModule deleteModuleUseCase;
-  final SaveLesson saveLessonUseCase;
+  final AddLesson addLessonUseCase;
+  final UpdateLesson updateLessonUseCase;
+  final DeleteLesson deleteLessonUseCase;
   final AddNews addNewsUseCase;
   final UpdateNews updateNewsUseCase;
   final DeleteNews deleteNewsUseCase;
@@ -42,7 +46,9 @@ class AdminViewModel extends ChangeNotifier {
     required this.addModuleUseCase,
     required this.updateModuleUseCase,
     required this.deleteModuleUseCase,
-    required this.saveLessonUseCase,
+    required this.addLessonUseCase,
+    required this.updateLessonUseCase,
+    required this.deleteLessonUseCase,
     required this.addNewsUseCase,
     required this.updateNewsUseCase,
     required this.deleteNewsUseCase,
@@ -59,17 +65,51 @@ class AdminViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> saveLesson(String moduleId, TeachingLesson lesson) async {
+  Future<void> addLesson(String moduleId, TeachingLesson lesson) async {
     _isLoading = true;
     _error = null;
     _successMessage = null;
     notifyListeners();
 
     try {
-      await saveLessonUseCase(moduleId, lesson);
-      _successMessage = 'Lección guardada exitosamente';
+      await addLessonUseCase(moduleId, lesson);
+      _successMessage = 'Lección agregada exitosamente';
     } catch (e) {
-      _error = 'Error al guardar lección: $e';
+      _error = 'Error al agregar lección: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateLesson(String id, TeachingLesson lesson) async {
+    _isLoading = true;
+    _error = null;
+    _successMessage = null;
+    notifyListeners();
+
+    try {
+      await updateLessonUseCase(id, lesson);
+      _successMessage = 'Lección actualizada exitosamente';
+    } catch (e) {
+      _error = 'Error al actualizar lección: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteLesson(String id) async {
+    _isLoading = true;
+    _error = null;
+    _successMessage = null;
+    notifyListeners();
+
+    try {
+      await deleteLessonUseCase(id);
+      _successMessage = 'Lección eliminada exitosamente';
+    } catch (e) {
+      _error = 'Error al eliminar lección: $e';
     } finally {
       _isLoading = false;
       notifyListeners();

@@ -1,85 +1,37 @@
+import '../../../../core/models/paginated_response.dart';
 import '../../domain/entities/word.dart';
 import '../../domain/repositories/dictionary_repository.dart';
 import '../datasources/dictionary_api_datasource.dart';
-import '../datasources/dictionary_mock_datasource.dart';
-import '../../../../core/config/env_config.dart';
 
 class DictionaryRepositoryImpl implements DictionaryRepository {
   final DictionaryApiDataSource apiDataSource;
-  final DictionaryMockDataSource mockDataSource;
 
-  DictionaryRepositoryImpl({
-    required this.apiDataSource,
-    required this.mockDataSource,
-  });
-
-  bool get _useMockData => EnvConfig.useMockData;
+  DictionaryRepositoryImpl({required this.apiDataSource});
 
   @override
-  Future<List<Word>> getWords() async {
-    try {
-      if (_useMockData) {
-        return await mockDataSource.getWords();
-      } else {
-        return await apiDataSource.getWords();
-      }
-    } catch (e) {
-      // Fallback to mock data if API fails
-      if (!_useMockData) {
-        return await mockDataSource.getWords();
-      }
-      rethrow;
-    }
+  Future<PaginatedResponse<Word>> getWords({
+    int page = 1,
+    int limit = 10,
+  }) async {
+    return await apiDataSource.getWords(page: page, limit: limit);
   }
 
   @override
-  Future<List<Word>> searchWords(String query) async {
-    try {
-      if (_useMockData) {
-        return await mockDataSource.searchWords(query);
-      } else {
-        return await apiDataSource.searchWords(query);
-      }
-    } catch (e) {
-      // Fallback to mock data if API fails
-      if (!_useMockData) {
-        return await mockDataSource.searchWords(query);
-      }
-      rethrow;
-    }
+  Future<PaginatedResponse<Word>> searchWords(
+    String query, {
+    int page = 1,
+    int limit = 10,
+  }) async {
+    return await apiDataSource.searchWords(query, page: page, limit: limit);
   }
 
   @override
   Future<Word?> getWordById(String id) async {
-    try {
-      if (_useMockData) {
-        return await mockDataSource.getWordById(id);
-      } else {
-        return await apiDataSource.getWordById(id);
-      }
-    } catch (e) {
-      // Fallback to mock data if API fails
-      if (!_useMockData) {
-        return await mockDataSource.getWordById(id);
-      }
-      rethrow;
-    }
+    return await apiDataSource.getWordById(id);
   }
 
   @override
   Future<List<Word>> getWordsByCategory(String category) async {
-    try {
-      if (_useMockData) {
-        return await mockDataSource.getWordsByCategory(category);
-      } else {
-        return await apiDataSource.getWordsByCategory(category);
-      }
-    } catch (e) {
-      // Fallback to mock data if API fails
-      if (!_useMockData) {
-        return await mockDataSource.getWordsByCategory(category);
-      }
-      rethrow;
-    }
+    return await apiDataSource.getWordsByCategory(category);
   }
 }

@@ -6,7 +6,7 @@ class GetMenuItems {
 
   GetMenuItems(this.repository);
 
-  Future<List<HomeMenuItem>> call(String? userEmail) async {
-    return await repository.getMenuItems(userEmail);
+  Future<List<HomeMenuItem>> call(String? token) async {
+    return await repository.getMenuItems(token);
   }
 }

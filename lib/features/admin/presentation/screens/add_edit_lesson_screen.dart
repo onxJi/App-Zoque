@@ -174,28 +174,26 @@ class _AddEditLessonScreenState extends State<AddEditLessonScreen> {
               ex.options.text.trim().isNotEmpty ||
               ex.correctAnswer.text.trim().isNotEmpty,
         )
-        .map(
-          (ex) {
-            final options = ex.options.text
-                .split(',')
-                .map((o) => o.trim())
-                .where((o) => o.isNotEmpty)
-                .toList();
+        .map((ex) {
+          final options = ex.options.text
+              .split(',')
+              .map((o) => o.trim())
+              .where((o) => o.isNotEmpty)
+              .toList();
 
-            return Exercise(
-              id: ex.id.text.trim().isEmpty
-                  ? DateTime.now().millisecondsSinceEpoch.toString()
-                  : ex.id.text.trim(),
-              type: ex.type.text.trim().isEmpty
-                  ? 'multiple_choice'
-                  : ex.type.text.trim(),
-              question: ex.question.text.trim(),
-              options: options,
-              correctAnswer: ex.correctAnswer.text.trim(),
-              explanation: ex.explanation.text.trim(),
-            );
-          },
-        )
+          return Exercise(
+            id: ex.id.text.trim().isEmpty
+                ? DateTime.now().millisecondsSinceEpoch.toString()
+                : ex.id.text.trim(),
+            type: ex.type.text.trim().isEmpty
+                ? 'multiple_choice'
+                : ex.type.text.trim(),
+            question: ex.question.text.trim(),
+            options: options,
+            correctAnswer: ex.correctAnswer.text.trim(),
+            explanation: ex.explanation.text.trim(),
+          );
+        })
         .toList();
   }
 
@@ -218,7 +216,17 @@ class _AddEditLessonScreenState extends State<AddEditLessonScreen> {
       isCompleted: _isEditing ? widget.initialLesson!.isCompleted : false,
     );
 
-    await context.read<AdminViewModel>().saveLesson(widget.module.id, newLesson);
+    if (_isEditing) {
+      await context.read<AdminViewModel>().updateLesson(
+        widget.initialLesson!.id,
+        newLesson,
+      );
+    } else {
+      await context.read<AdminViewModel>().addLesson(
+        widget.module.id,
+        newLesson,
+      );
+    }
 
     if (!mounted) return;
 
@@ -233,10 +241,7 @@ class _AddEditLessonScreenState extends State<AddEditLessonScreen> {
       Navigator.pop(context, true);
     } else if (vm.error != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(vm.error!),
-          backgroundColor: Colors.red,
-        ),
+        SnackBar(content: Text(vm.error!), backgroundColor: Colors.red),
       );
     }
   }
@@ -321,7 +326,10 @@ class _AddEditLessonScreenState extends State<AddEditLessonScreen> {
                         value: 'vocabulary',
                         child: Text('vocabulary'),
                       ),
-                      DropdownMenuItem(value: 'grammar', child: Text('grammar')),
+                      DropdownMenuItem(
+                        value: 'grammar',
+                        child: Text('grammar'),
+                      ),
                       DropdownMenuItem(
                         value: 'practice',
                         child: Text('practice'),
@@ -487,10 +495,7 @@ class _SectionCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: onAdd,
-                  icon: const Icon(Icons.add),
-                ),
+                IconButton(onPressed: onAdd, icon: const Icon(Icons.add)),
               ],
             ),
             const SizedBox(height: 8),

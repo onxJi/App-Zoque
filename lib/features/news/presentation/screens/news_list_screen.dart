@@ -13,6 +13,7 @@ class NewsListScreen extends StatefulWidget {
 
 class _NewsListScreenState extends State<NewsListScreen> {
   final TextEditingController _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -21,12 +22,22 @@ class _NewsListScreenState extends State<NewsListScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<NewsViewModel>().loadNews();
     });
+
+    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<NewsViewModel>().loadNews(refresh: false);
+    }
   }
 
   @override
@@ -80,7 +91,10 @@ class _NewsListScreenState extends State<NewsListScreen> {
             children: [
               // Search Bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: TextField(
                   controller: _searchController,
                   onChanged: (value) {
@@ -144,21 +158,33 @@ class _NewsListScreenState extends State<NewsListScreen> {
                           ),
                         )
                       : ListView.builder(
+                          controller: _scrollController,
                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                          itemCount: viewModel.newsItems.length,
+                          itemCount:
+                              viewModel.newsItems.length +
+                              (viewModel.isLoadingMore ? 1 : 0),
                           itemBuilder: (context, index) {
-                            final newsItem = viewModel.newsItems[index];
-                            return NewsCard(
-                              newsItem: newsItem,
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        NewsDetailScreen(newsItem: newsItem),
-                                  ),
-                                );
-                              },
-                            );
+                            if (index < viewModel.newsItems.length) {
+                              final newsItem = viewModel.newsItems[index];
+                              return NewsCard(
+                                newsItem: newsItem,
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          NewsDetailScreen(newsItem: newsItem),
+                                    ),
+                                  );
+                                },
+                              );
+                            } else {
+                              return const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 32.0),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
                           },
                         ),
                 ),

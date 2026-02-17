@@ -115,4 +115,9 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  /// Obtiene el ID Token actual
+  Future<String?> getIdToken() async {
+    return await _authService.getIdToken();
+  }
 }

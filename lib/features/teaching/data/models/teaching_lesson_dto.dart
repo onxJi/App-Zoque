@@ -48,6 +48,19 @@ class TeachingLessonDTO {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'content': content,
+      'duration': duration,
+      'type': type,
+      'vocabulary': vocabulary.map((v) => v.toJson()).toList(),
+      'examples': examples.map((e) => e.toJson()).toList(),
+      'exercises': exercises.map((ex) => ex.toJson()).toList(),
+    };
+  }
+
   TeachingLesson toEntity() {
     return TeachingLesson(
       id: id,
@@ -60,36 +73,74 @@ class TeachingLessonDTO {
       exercises: exercises.map((ex) => ex.toEntity()).toList(),
     );
   }
+
+  factory TeachingLessonDTO.fromEntity(TeachingLesson entity) {
+    return TeachingLessonDTO(
+      id: entity.id,
+      title: entity.title,
+      content: entity.content,
+      duration: entity.duration,
+      type: entity.type,
+      vocabulary: entity.vocabulary
+          .map((v) => VocabularyItemDTO.fromEntity(v))
+          .toList(),
+      examples: entity.examples
+          .map((e) => LessonExampleDTO.fromEntity(e))
+          .toList(),
+      exercises: entity.exercises
+          .map((ex) => ExerciseDTO.fromEntity(ex))
+          .toList(),
+    );
+  }
 }
 
 class VocabularyItemDTO {
-  final String zoque;
-  final String spanish;
+  final String word;
+  final String translation;
   final String pronunciation;
   final String? audioUrl;
 
   const VocabularyItemDTO({
-    required this.zoque,
-    required this.spanish,
+    required this.word,
+    required this.translation,
     required this.pronunciation,
     this.audioUrl,
   });
 
   factory VocabularyItemDTO.fromJson(Map<String, dynamic> json) {
     return VocabularyItemDTO(
-      zoque: json['zoque'] as String,
-      spanish: json['spanish'] as String,
-      pronunciation: json['pronunciation'] as String,
+      word: json['word'] as String? ?? json['zoque'] as String? ?? '',
+      translation:
+          json['translation'] as String? ?? json['spanish'] as String? ?? '',
+      pronunciation: json['pronunciation'] as String? ?? '',
       audioUrl: json['audioUrl'] as String?,
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'word': word,
+      'translation': translation,
+      'pronunciation': pronunciation,
+      'audioUrl': audioUrl,
+    };
+  }
+
   VocabularyItem toEntity() {
     return VocabularyItem(
-      zoque: zoque,
-      spanish: spanish,
+      zoque: word,
+      spanish: translation,
       pronunciation: pronunciation,
       audioUrl: audioUrl,
+    );
+  }
+
+  factory VocabularyItemDTO.fromEntity(VocabularyItem entity) {
+    return VocabularyItemDTO(
+      word: entity.zoque,
+      translation: entity.spanish,
+      pronunciation: entity.pronunciation,
+      audioUrl: entity.audioUrl,
     );
   }
 }
@@ -97,65 +148,111 @@ class VocabularyItemDTO {
 class LessonExampleDTO {
   final String zoque;
   final String spanish;
-  final String context;
+  final String? context;
 
   const LessonExampleDTO({
     required this.zoque,
     required this.spanish,
-    required this.context,
+    this.context,
   });
 
   factory LessonExampleDTO.fromJson(Map<String, dynamic> json) {
     return LessonExampleDTO(
       zoque: json['zoque'] as String,
       spanish: json['spanish'] as String,
-      context: json['context'] as String,
+      context: json['context'] as String?,
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {'zoque': zoque, 'spanish': spanish, 'context': context};
+  }
+
   LessonExample toEntity() {
-    return LessonExample(zoque: zoque, spanish: spanish, context: context);
+    return LessonExample(
+      zoque: zoque,
+      spanish: spanish,
+      context: context ?? '',
+    );
+  }
+
+  factory LessonExampleDTO.fromEntity(LessonExample entity) {
+    return LessonExampleDTO(
+      zoque: entity.zoque,
+      spanish: entity.spanish,
+      context: entity.context,
+    );
   }
 }
 
 class ExerciseDTO {
-  final String id;
+  final String? id;
   final String type;
   final String question;
   final List<String> options;
-  final String correctAnswer;
-  final String explanation;
+  final int correctAnswer;
+  final String? explanation;
 
   const ExerciseDTO({
-    required this.id,
+    this.id,
     required this.type,
     required this.question,
     required this.options,
     required this.correctAnswer,
-    required this.explanation,
+    this.explanation,
   });
 
   factory ExerciseDTO.fromJson(Map<String, dynamic> json) {
     return ExerciseDTO(
-      id: json['id'] as String,
-      type: json['type'] as String,
+      id: json['id'] as String?,
+      type: json['type'] as String? ?? 'multiple_choice',
       question: json['question'] as String,
-      options: (json['options'] as List<dynamic>)
-          .map((o) => o as String)
-          .toList(),
-      correctAnswer: json['correctAnswer'] as String,
-      explanation: json['explanation'] as String,
+      options:
+          (json['options'] as List<dynamic>?)
+              ?.map((o) => o as String)
+              .toList() ??
+          [],
+      correctAnswer: _parseCorrectAnswer(json['correctAnswer']),
+      explanation: json['explanation'] as String?,
     );
+  }
+
+  static int _parseCorrectAnswer(dynamic value) {
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (id != null) 'id': id,
+      'type': type,
+      'question': question,
+      'options': options,
+      'correctAnswer': correctAnswer,
+      if (explanation != null) 'explanation': explanation,
+    };
   }
 
   Exercise toEntity() {
     return Exercise(
-      id: id,
+      id: id ?? '',
       type: type,
       question: question,
       options: options,
-      correctAnswer: correctAnswer,
-      explanation: explanation,
+      correctAnswer: correctAnswer.toString(),
+      explanation: explanation ?? '',
+    );
+  }
+
+  factory ExerciseDTO.fromEntity(Exercise entity) {
+    return ExerciseDTO(
+      id: entity.id,
+      type: entity.type,
+      question: entity.question,
+      options: entity.options,
+      correctAnswer: int.tryParse(entity.correctAnswer) ?? 0,
+      explanation: entity.explanation,
     );
   }
 }

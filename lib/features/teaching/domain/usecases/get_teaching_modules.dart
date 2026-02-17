@@ -1,3 +1,4 @@
+import 'package:appzoque/core/models/paginated_response.dart';
 import 'package:appzoque/features/teaching/domain/entities/teaching_module.dart';
 import 'package:appzoque/features/teaching/domain/repositories/teaching_repository.dart';
 
@@ -6,7 +7,15 @@ class GetTeachingModules {
 
   GetTeachingModules(this.repository);
 
-  Future<List<TeachingModule>> call() async {
-    return await repository.getModules();
+  Future<PaginatedResponse<TeachingModule>> call({
+    int page = 1,
+    int limit = 10,
+    String? search,
+  }) async {
+    return await repository.getModules(
+      page: page,
+      limit: limit,
+      search: search,
+    );
   }
 }
